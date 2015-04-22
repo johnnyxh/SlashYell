@@ -1,9 +1,25 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <!-- Refresh -->
+    <item android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_action_refresh"
+        android:title="@string/action_refresh"
+        android:showAsAction="always"
+        app:showAsAction="always" />
+
+    <!-- Location Found -->
+    <item android:id="@+id/action_location_found"
+        android:icon="@drawable/ic_action_location_found"
+        android:title="@string/action_location"
+        android:showAsAction="always"
+        app:showAsAction="always" />
 
     <item
-        android:id="@+id/new_yell" android:title="@string/new_yell" android:icon="@drawable/new_yell" app:showAsAction="always" />
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+        android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
 </menu>

@@ -1,5 +1,7 @@
 package com.slashyell.jxhernandez.slashyell;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.location.Criteria;
 import android.location.LocationManager;
@@ -39,7 +41,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
     private static final float ZOOM_LEVEL = 16f;
 
@@ -51,6 +53,11 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Setting custom action bars
+        ActionBar actionBar = getActionBar();
+        actionBar.setCustomView(R.layout.actionbar_top); //load your layout
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_SHOW_CUSTOM); //show it
 
         map = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.mapview)).getMap();
