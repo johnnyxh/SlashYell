@@ -7,12 +7,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 
 public class NewYellActivity extends Activity {
 
-    ImageButton sendButton;
+    Button sendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +21,10 @@ public class NewYellActivity extends Activity {
         setContentView(R.layout.activity_new_yell);
 
         ActionBar actionBar = getActionBar();
+        actionBar.setCustomView(R.layout.newyell_actionbar_top); //load your layout
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_SHOW_CUSTOM); //show it
 
-        sendButton = (ImageButton) findViewById(R.id.action_send);
+        sendButton = (Button) findViewById(R.id.action_send);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
                 public void onClick(View v) {

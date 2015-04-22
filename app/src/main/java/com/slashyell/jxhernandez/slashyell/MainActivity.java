@@ -7,22 +7,15 @@ import android.content.Intent;
 import android.location.Criteria;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.example.johnny.myapplication.backend.messaging.Messaging;
-import com.example.johnny.myapplication.backend.registration.Registration;
 import com.example.johnny.myapplication.backend.yellMessageApi.YellMessageApi;
-import com.example.johnny.myapplication.backend.yellMessageApi.YellMessageApiRequest;
-import com.example.johnny.myapplication.backend.yellMessageApi.YellMessageApiRequestInitializer;
-import com.example.johnny.myapplication.backend.yellMessageApi.YellMessageApiScopes;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.GeoPt;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.YellMessage;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -33,9 +26,6 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestInitializer;
-import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.DateTime;
 
 import java.io.IOException;
@@ -60,7 +50,7 @@ public class MainActivity extends Activity {
 
         // Setting custom action bars
         ActionBar actionBar = getActionBar();
-        actionBar.setCustomView(R.layout.actionbar_top); //load your layout
+        actionBar.setCustomView(R.layout.main_actionbar_top); //load your layout
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_SHOW_CUSTOM); //show it
 
         newYellButton = (ImageButton) findViewById(R.id.new_yell);
@@ -106,7 +96,7 @@ public class MainActivity extends Activity {
         // Initial animation/zoom into users position
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude(), gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude()), ZOOM_LEVEL));
 
-        //new EndPointAsyncTask().execute();
+        new EndPointAsyncTask().execute();
     }
 
 
