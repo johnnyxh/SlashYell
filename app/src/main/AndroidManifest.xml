@@ -50,7 +50,8 @@
 
         <activity
             android:name=".NewYellActivity"
-            android:label="@string/title_activity_new_yell" >
+            android:label="@string/title_activity_new_yell"
+            android:parentActivityName=".MainActivity">
         </activity>
     </application>
 

@@ -13,24 +13,10 @@ import android.widget.ImageButton;
 
 public class NewYellActivity extends Activity {
 
-    Button sendButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_yell);
-
-        ActionBar actionBar = getActionBar();
-        actionBar.setCustomView(R.layout.newyell_actionbar_top); //load your layout
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_SHOW_CUSTOM); //show it
-
-        sendButton = (Button) findViewById(R.id.action_send);
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-                public void onClick(View v) {
-                    sendYell();
-            }
-        });
 
     }
 
@@ -52,6 +38,8 @@ public class NewYellActivity extends Activity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.action_send) {
+            sendYell();
         }
 
         return super.onOptionsItemSelected(item);
