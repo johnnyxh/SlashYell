@@ -31,9 +31,12 @@ import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.DateTime;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -52,15 +55,34 @@ public class MainActivity extends ActionBarActivity {
         map = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.mapview)).getMap();
 
+        gps = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         yellList = (ListView) findViewById(R.id.yellList);
         yellList.setEmptyView(findViewById(R.id.emptyElement));
-        ArrayList<String> testItems = new ArrayList<String>();
-        testItems.add("Test Item #1");
-        testItems.add("Test Item #2");
-        ListAdapter testAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, testItems);
-        yellList.setAdapter(testAdapter);
+        ArrayList<YellMessage> testItems = new ArrayList<YellMessage>();
 
-        gps = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        YellMessage test1 = new YellMessage();
+        test1.setUserId("Johnny Hernandez");
+        test1.setDate(new DateTime(new Date(), TimeZone.getTimeZone("EST")));
+        GeoPt myLocation = new GeoPt();
+        myLocation.setLatitude((float) gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude());
+        myLocation.setLongitude((float) gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude());
+        test1.setLocation(myLocation);
+        test1.setMessage("Look at this amazing list its cool right?");
+        testItems.add(test1);
+
+        YellMessage test2 = new YellMessage();
+        test2.setUserId("Johnny Hernandez");
+        test2.setDate(new DateTime(new Date(), TimeZone.getTimeZone("EST")));
+        GeoPt myLocation2 = new GeoPt();
+        myLocation2.setLatitude((float) gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude());
+        myLocation2.setLongitude((float) gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude());
+        test2.setLocation(myLocation2);
+        test2.setMessage("It looks like absolute trash");
+        testItems.add(test2);
+
+        ListAdapter testAdapter = new YellMessageListAdapter(this, R.layout.yell_item, testItems);
+        yellList.setAdapter(testAdapter);
 
         // Initial animation/zoom into users position
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude(), gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude()), ZOOM_LEVEL));
