@@ -4,4 +4,8 @@
     tools:context="com.slashyell.jxhernandez.slashyell.NewYellActivity">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
+
+    <item android:id="@+id/action_send"
+        android:title="@string/action_send"
+        app:showAsAction="always" />
 </menu>
