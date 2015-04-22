@@ -2,3 +2,5 @@ backend/build/
 build/
 local.properties
 .idea/workspace.xml
+.gradle/2.2.1/taskArtifacts/
+backend/backend.iml
