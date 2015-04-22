@@ -3,6 +3,7 @@ package com.slashyell.jxhernandez.slashyell;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -10,7 +11,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -45,6 +48,7 @@ public class MainActivity extends Activity {
 
     private static final float ZOOM_LEVEL = 16f;
 
+    private ImageButton newYellButton;
     private GoogleMap map;
     private LocationManager gps;
     private ListView yellList;
@@ -58,6 +62,14 @@ public class MainActivity extends Activity {
         ActionBar actionBar = getActionBar();
         actionBar.setCustomView(R.layout.actionbar_top); //load your layout
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_SHOW_CUSTOM); //show it
+
+        newYellButton = (ImageButton) findViewById(R.id.new_yell);
+        newYellButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createNewYell();
+            }
+        });
 
         map = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.mapview)).getMap();
@@ -152,5 +164,10 @@ public class MainActivity extends Activity {
 
             return null;
         }
+    }
+
+    private void createNewYell() {
+        Intent newYellIntent = new Intent(this, NewYellActivity.class);
+        startActivity(newYellIntent);
     }
 }
