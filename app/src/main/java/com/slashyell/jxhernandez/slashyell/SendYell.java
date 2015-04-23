@@ -16,11 +16,17 @@ import java.io.IOException;
 /**
  * Created by scien_000 on 4/23/2015.
  */
-public class SendYell extends AsyncTask<YellMessage, Void, Void>
+public class SendYell extends AsyncTask<Void, Void, Void>
 {
 
+    YellMessage myMessage;
+
+    public SendYell(YellMessage ym) {
+        myMessage = ym;
+    }
+
     @Override
-    protected Void doInBackground(YellMessage... message) {
+    protected Void doInBackground(Void... params) {
         YellMessageApi.Builder builder = new YellMessageApi.Builder(AndroidHttp.newCompatibleTransport(),
                 new AndroidJsonFactory(), null)
                 .setRootUrl("http://10.0.2.2:8080/_ah/api/")
@@ -34,7 +40,7 @@ public class SendYell extends AsyncTask<YellMessage, Void, Void>
         YellMessageApi myApi = builder.build();
 
         try {
-            myApi.insert(message[0]).execute();
+            myApi.insert(myMessage).execute();
         } catch (IOException e) {
             e.printStackTrace();
         }
