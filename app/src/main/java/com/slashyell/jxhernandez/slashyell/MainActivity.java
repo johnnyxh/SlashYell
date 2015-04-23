@@ -73,20 +73,26 @@ public class MainActivity extends Activity {
         YellMessage test1 = new YellMessage();
         test1.setUserId("Johnny Hernandez");
         test1.setDate(new DateTime(new Date(), TimeZone.getTimeZone("EST")));
-        GeoPt myLocation = new GeoPt();
-        myLocation.setLatitude((float) gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude());
-        myLocation.setLongitude((float) gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude());
-        test1.setLocation(myLocation);
+
+        if (gps != null) {
+            GeoPt myLocation = new GeoPt();
+            myLocation.setLatitude((float) gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude());
+            myLocation.setLongitude((float) gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude());
+            test1.setLocation(myLocation);
+        }
+        
         test1.setMessage("Look at this amazing list its cool right?");
         testItems.add(test1);
 
         YellMessage test2 = new YellMessage();
         test2.setUserId("Johnny Hernandez");
         test2.setDate(new DateTime(new Date(), TimeZone.getTimeZone("EST")));
-        GeoPt myLocation2 = new GeoPt();
-        myLocation2.setLatitude((float) gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude());
-        myLocation2.setLongitude((float) gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude());
-        test2.setLocation(myLocation2);
+        if (gps!=null) {
+            GeoPt myLocation2 = new GeoPt();
+            myLocation2.setLatitude((float) gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude());
+            myLocation2.setLongitude((float) gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude());
+            test2.setLocation(myLocation2);
+        }
         test2.setMessage("It looks like absolute trash");
         testItems.add(test2);
 
@@ -96,7 +102,7 @@ public class MainActivity extends Activity {
         // Initial animation/zoom into users position
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude(), gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude()), ZOOM_LEVEL));
 
-        new EndPointAsyncTask().execute();
+        //new EndPointAsyncTask().execute();
     }
 
 
