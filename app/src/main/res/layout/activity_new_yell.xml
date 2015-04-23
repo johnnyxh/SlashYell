@@ -14,6 +14,7 @@
         class="com.google.android.gms.maps.MapFragment" />
 
     <EditText
+        android:id="@+id/yelltext"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"

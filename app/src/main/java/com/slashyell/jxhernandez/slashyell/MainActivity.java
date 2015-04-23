@@ -72,6 +72,7 @@ public class MainActivity extends Activity {
 
         yellList = (ListView) findViewById(R.id.yellList);
         yellList.setEmptyView(findViewById(R.id.emptyElement));
+
         ArrayList<YellMessage> testItems = new ArrayList<YellMessage>();
 
         YellMessage test1 = new YellMessage();
@@ -127,39 +128,7 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private class EndPointAsyncTask extends AsyncTask<Void, Void, Void>
-    {
 
-        @Override
-        protected Void doInBackground(Void... params) {
-            YellMessageApi.Builder builder = new YellMessageApi.Builder(AndroidHttp.newCompatibleTransport(),
-                    new AndroidJsonFactory(), null)
-                    .setRootUrl("http://10.0.2.2:8080/_ah/api/")
-                    .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
-                        @Override
-                        public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {
-                            abstractGoogleClientRequest.setDisableGZipContent(true);
-                        }
-                    });
-
-            YellMessageApi myApi = builder.build();
-
-            try {
-                YellMessage message = new YellMessage();
-                GeoPt location = new GeoPt();
-                message.setId(new Long(25));
-                location.setLongitude(14.34782f);
-                location.setLatitude(10.34782f);
-                message.setLocation(location);
-                message.setMessage("DOES IT WORK?");
-                myApi.insert(message).execute();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-    }
 
     private void createNewYell() {
         Intent newYellIntent = new Intent(this, NewYellActivity.class);
