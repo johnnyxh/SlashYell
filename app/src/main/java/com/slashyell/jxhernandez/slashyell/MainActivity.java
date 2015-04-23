@@ -52,7 +52,7 @@ public class MainActivity extends Activity {
         // Setting custom action bars
         ActionBar actionBar = getActionBar();
         actionBar.setCustomView(R.layout.main_actionbar_top); //load your layout
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_SHOW_CUSTOM); //show it
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM); //show it
 
         newYellButton = (ImageButton) findViewById(R.id.new_yell);
         newYellButton.setOnClickListener(new View.OnClickListener() {
@@ -69,47 +69,8 @@ public class MainActivity extends Activity {
 
         yellList = (ListView) findViewById(R.id.yellList);
         yellList.setEmptyView(findViewById(R.id.emptyElement));
-        ArrayList<YellMessage> testItems = new ArrayList<YellMessage>();
 
-        YellMessage test1 = new YellMessage();
-        test1.setUserId("Johnny Hernandez");
-        test1.setDate(new DateTime(new Date(), TimeZone.getTimeZone("EST")));
-
-        GeoPt myLocation = getLocation();
-        if (myLocation!=null)
-            test1.setLocation(getLocation());
-
-        test1.setMessage("Look at this amazing list its cool right?");
-        testItems.add(test1);
-
-        YellMessage test2 = new YellMessage();
-        test2.setUserId("Johnny Hernandez");
-        test2.setDate(new DateTime(new Date(), TimeZone.getTimeZone("EST")));
-        if (myLocation!=null)
-            test2.setLocation(getLocation());
-
-        test2.setMessage("It looks like absolute trash");
-        testItems.add(test2);
-
-        ListAdapter testAdapter = new YellMessageListAdapter(this, R.layout.yell_item, testItems);
-        yellList.setAdapter(testAdapter);
-
-        // Initial animation/zoom into users position
-        if (myLocation!=null)
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude(), gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude()), ZOOM_LEVEL));
-    }
-
-    public GeoPt getLocation() {
-        GeoPt location = new GeoPt();
-        Location pos = gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true));
-        if (pos == null) {
-            return null;
-        }
-        else {
-            location.setLatitude((float) pos.getLatitude());
-            location.setLongitude((float) pos.getLongitude());
-            return location;
-        }
+        //new EndPointAsyncTask().execute();
     }
 
     @Override

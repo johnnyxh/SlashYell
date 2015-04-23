@@ -74,11 +74,10 @@ public class NewYellActivity extends Activity {
         }
 
         YellMessage yellMessage = new YellMessage();
-        yellMessage.setLocation();
+        yellMessage.setLocation(MapUtils.getLocation(gps));
         yellMessage.setMessage(message);
         yellMessage.setDate(new DateTime(new Date()));
 
-        SendYell sender = new SendYell();
-        sender.doInBackground(yellMessage);
+        new SendYell(yellMessage).execute();
     }
 }
