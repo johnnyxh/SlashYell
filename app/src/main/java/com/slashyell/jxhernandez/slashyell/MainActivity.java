@@ -102,6 +102,8 @@ public class MainActivity extends Activity {
         // Initial animation/zoom into users position
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude(), gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude()), ZOOM_LEVEL));
 
+        MapUtils.addMessageToMap(map, test1);
+
         //new EndPointAsyncTask().execute();
     }
 
