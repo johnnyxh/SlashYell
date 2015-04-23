@@ -18,6 +18,8 @@
         android:layout_height="0dp"
         android:layout_weight="3"
         android:inputType="textMultiLine"
+        android:hint="@string/new_yell_hint"
+        android:textColorHint="@color/hint_text_color"
         android:gravity="top|left"
         android:scrollbars="vertical"
         />
