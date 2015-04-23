@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Criteria;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -74,25 +75,19 @@ public class MainActivity extends Activity {
         test1.setUserId("Johnny Hernandez");
         test1.setDate(new DateTime(new Date(), TimeZone.getTimeZone("EST")));
 
-        if (gps != null) {
-            GeoPt myLocation = new GeoPt();
-            myLocation.setLatitude((float) gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude());
-            myLocation.setLongitude((float) gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude());
-            test1.setLocation(myLocation);
-        }
-        
+        GeoPt myLocation = getLocation();
+        if (myLocation!=null)
+            test1.setLocation(getLocation());
+
         test1.setMessage("Look at this amazing list its cool right?");
         testItems.add(test1);
 
         YellMessage test2 = new YellMessage();
         test2.setUserId("Johnny Hernandez");
         test2.setDate(new DateTime(new Date(), TimeZone.getTimeZone("EST")));
-        if (gps!=null) {
-            GeoPt myLocation2 = new GeoPt();
-            myLocation2.setLatitude((float) gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude());
-            myLocation2.setLongitude((float) gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude());
-            test2.setLocation(myLocation2);
-        }
+        if (myLocation!=null)
+            test2.setLocation(getLocation());
+
         test2.setMessage("It looks like absolute trash");
         testItems.add(test2);
 
@@ -100,11 +95,24 @@ public class MainActivity extends Activity {
         yellList.setAdapter(testAdapter);
 
         // Initial animation/zoom into users position
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude(), gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude()), ZOOM_LEVEL));
+        if (myLocation!=null)
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude(), gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude()), ZOOM_LEVEL));
 
-        //new EndPointAsyncTask().execute();
+        new EndPointAsyncTask().execute();
     }
 
+    public GeoPt getLocation() {
+        GeoPt location = new GeoPt();
+        Location pos = gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true));
+        if (pos == null) {
+            return null;
+        }
+        else {
+            location.setLatitude((float) pos.getLatitude());
+            location.setLongitude((float) pos.getLongitude());
+            return location;
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
