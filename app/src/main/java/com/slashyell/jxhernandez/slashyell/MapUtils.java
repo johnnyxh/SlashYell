@@ -18,11 +18,10 @@ public final class MapUtils {
 
     private MapUtils() {}
 
-    public static void addMessageToMap(GoogleMap map, YellMessage message) {
+    public static void addMessageToMap(GoogleMap map, YellMessage message, YellMessageWindowAdapter markerAdapter) {
         MarkerOptions pinOptions = new MarkerOptions();
         pinOptions.position(new LatLng(message.getLocation().getLatitude(), message.getLocation().getLongitude()));
-        pinOptions.title(message.getUserId());
-        pinOptions.snippet(message.getMessage());
+        markerAdapter.setYellMessage(message);
         pinOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
 
         map.addMarker(pinOptions);

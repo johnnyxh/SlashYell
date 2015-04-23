@@ -65,6 +65,9 @@ public class MainActivity extends Activity {
         map = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.mapview)).getMap();
 
+        YellMessageWindowAdapter markerAdapter = new YellMessageWindowAdapter(this.getLayoutInflater());
+        map.setInfoWindowAdapter(markerAdapter);
+
         gps = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         yellList = (ListView) findViewById(R.id.yellList);
@@ -98,7 +101,7 @@ public class MainActivity extends Activity {
         if (myLocation != null)
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude(), gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude()), ZOOM_LEVEL));
 
-        MapUtils.addMessageToMap(map, test1);
+        MapUtils.addMessageToMap(map, test1, markerAdapter);
         //new EndPointAsyncTask().execute();
     }
 
