@@ -28,6 +28,7 @@ dependencies {
     compile 'javax.servlet:servlet-api:2.5'
     compile 'com.googlecode.objectify:objectify:5.0.3'
     compile 'com.ganyo:gcm-server:1.0.2'
+    compile 'org.usergrid:geocell:0.0.11'
 }
 
 appengine {
