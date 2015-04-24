@@ -3,9 +3,11 @@ package com.slashyell.jxhernandez.slashyell;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -123,7 +125,11 @@ public class NewYellActivity extends Activity {
             return;
         }
 
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String displayName = sharedPref.getString(SettingsActivity.DISPLAY_NAME, "Anon");
+
         YellMessage yellMessage = new YellMessage();
+        yellMessage.setUserId(displayName);
         GeoPt userLocation = new GeoPt();
         userLocation.setLatitude((float)messageMarker.getPosition().latitude);
         userLocation.setLongitude((float)messageMarker.getPosition().longitude);

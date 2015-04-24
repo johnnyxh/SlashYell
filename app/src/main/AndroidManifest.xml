@@ -51,7 +51,15 @@
         <activity
             android:name=".NewYellActivity"
             android:label="@string/title_activity_new_yell"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity" >
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.slashyell.jxhernandez.slashyell.MainActivity" />
         </activity>
     </application>
 
