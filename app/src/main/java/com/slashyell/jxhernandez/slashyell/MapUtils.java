@@ -11,6 +11,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
@@ -20,23 +21,16 @@ public final class MapUtils {
 
     private MapUtils() {}
 
-    public static void addMessageToMap(GoogleMap map, YellMessage message, YellMessageWindowAdapter markerAdapter) {
+    public static Marker addMessageToMap(GoogleMap map, YellMessage message, YellMessageWindowAdapter markerAdapter) {
         MarkerOptions pinOptions = new MarkerOptions();
         pinOptions.position(new LatLng(message.getLocation().getLatitude(), message.getLocation().getLongitude()));
         markerAdapter.setYellMessage(message);
         pinOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
 
-        map.addMarker(pinOptions);
+        return map.addMarker(pinOptions);
     }
 
-    public static void addPreviewToMap(GoogleMap map, GeoPt location) {
-        MarkerOptions pinOptions = new MarkerOptions();
-        pinOptions.position(new LatLng(location.getLatitude(), location.getLongitude()));
-        pinOptions.draggable(true);
-        pinOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-
-        map.addMarker(pinOptions);
-
+    public static Marker addPreviewToMap(GoogleMap map, GeoPt location) {
         CircleOptions dragRadius = new CircleOptions();
         dragRadius.center(new LatLng(location.getLatitude(), location.getLongitude()));
         //TODO: Remove hardcoded numbers. Radius is in meters keep that in mind.
@@ -46,6 +40,13 @@ public final class MapUtils {
         dragRadius.strokeWidth(2f);
 
         map.addCircle(dragRadius);
+
+        MarkerOptions pinOptions = new MarkerOptions();
+        pinOptions.position(new LatLng(location.getLatitude(), location.getLongitude()));
+        pinOptions.draggable(true);
+        pinOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+
+        return map.addMarker(pinOptions);
     }
 
     public static LatLng reduceDistanceBetween(Location center, Location current, float maxDistance) {

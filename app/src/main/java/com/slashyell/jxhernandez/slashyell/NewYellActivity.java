@@ -32,6 +32,8 @@ import java.util.Date;
 
 public class NewYellActivity extends Activity {
 
+    private Marker messageMarker;
+
     private EditText yellText;
     private GoogleMap map;
     private LocationManager gps;
@@ -56,7 +58,7 @@ public class NewYellActivity extends Activity {
         if (myLocation != null) {
             //TODO: Might want the ZOOM_LEVEL constant accessible somewhere else. Hardcoded right now
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLocation.getLatitude(), myLocation.getLongitude()), 16f));
-            MapUtils.addPreviewToMap(map, myLocation);
+            messageMarker = MapUtils.addPreviewToMap(map, myLocation);
 
             // Disallow dragging marker outside of correctional radius
             //TODO: Clean this up
@@ -122,7 +124,10 @@ public class NewYellActivity extends Activity {
         }
 
         YellMessage yellMessage = new YellMessage();
-        yellMessage.setLocation(MapUtils.getLocation(gps));
+        GeoPt userLocation = new GeoPt();
+        userLocation.setLatitude((float)messageMarker.getPosition().latitude);
+        userLocation.setLongitude((float)messageMarker.getPosition().longitude);
+        yellMessage.setLocation(userLocation);
         yellMessage.setMessage(message);
         yellMessage.setDate(new DateTime(new Date()));
 
