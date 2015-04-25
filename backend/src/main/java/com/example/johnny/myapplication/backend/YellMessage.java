@@ -1,8 +1,11 @@
 package com.example.johnny.myapplication.backend;
 
 import com.google.appengine.api.datastore.GeoPt;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Index;
 
 import java.util.Date;
 
@@ -20,6 +23,8 @@ public class YellMessage {
     String message;
     GeoPt location;
     Date date;
+    @Index
+    Long opId;
 
     public YellMessage () {}
 
@@ -54,5 +59,9 @@ public class YellMessage {
     public Date getDate() { return this.date; }
 
     public void setDate(Date date) { this.date = date; }
+
+    public Long getOpId() { return opId; }
+
+    public void setOp(Long opId) { this.opId = opId; }
 
 }

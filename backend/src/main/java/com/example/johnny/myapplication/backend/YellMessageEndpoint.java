@@ -68,6 +68,28 @@ public class YellMessageEndpoint {
     }
 
     /**
+     * Returns the replies of the {@link YellMessage} with the corresponding ID.
+     *
+     * @param id the ID of the entity to be retrieved
+     * @return the entity with the corresponding ID
+     * @throws NotFoundException if there is no {@code YellMessage} with the provided ID.
+     */
+    @ApiMethod(
+            name = "getReplies",
+            path = "yellMessageReplies/{id}",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public CollectionResponse<YellMessage> getReplies(@Named("id") Long id) throws NotFoundException {
+        logger.info("Getting replies to YellMessage with ID: " + id);
+        Query<YellMessage> replies = ofy().load().type(YellMessage.class).filter("opId", id);
+        QueryResultIterator<YellMessage> queryIterator = replies.iterator();
+        List<YellMessage> yellMessageList = new ArrayList<YellMessage>();
+        while (queryIterator.hasNext()) {
+            yellMessageList.add(queryIterator.next());
+        }
+        return CollectionResponse.<YellMessage>builder().setItems(yellMessageList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
+    }
+
+    /**
      * Inserts a new {@code YellMessage}.
      */
     @ApiMethod(
