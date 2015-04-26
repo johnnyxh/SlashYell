@@ -1,5 +1,8 @@
 package com.example.johnny.myapplication.backend;
 
+import com.beoui.geocell.GeocellManager;
+import com.beoui.geocell.model.LocationCapable;
+import com.beoui.geocell.model.Point;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
@@ -102,6 +105,13 @@ public class YellMessageEndpoint {
         // Objectify ID generator, e.g. long or String, then you should generate the unique ID yourself prior to saving.
         //
         // If your client provides the ID then you should probably use PUT instead.
+
+        // Create new point from lat/long coordinates
+        Point p = new Point(yellMessage.getLocation().getLatitude(), yellMessage.getLocation().getLongitude());
+        // Store generated list of geocells
+        List<String> cells = GeocellManager.generateGeoCell(p);
+        yellMessage.setCells(cells);
+        logger.info("Geocells to be saved for Point("+p.getLat()+","+p.getLon()+") are: "+cells);
         ofy().save().entity(yellMessage).now();
         logger.info("Created YellMessage with ID: " + yellMessage.getId());
 
