@@ -9,6 +9,7 @@ import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.api.server.spi.response.NotFoundException;
 import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.api.datastore.GeoPt;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.cmd.Query;
@@ -88,6 +89,31 @@ public class YellMessageEndpoint {
         List<YellMessage> yellMessageList = new ArrayList<YellMessage>();
         while (queryIterator.hasNext()) {
             yellMessageList.add(queryIterator.next());
+        }
+        return CollectionResponse.<YellMessage>builder().setItems(yellMessageList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
+    }
+
+    /**
+     * Returns the messages of the {@link YellMessage} around (5) the location given.
+     *
+     * @param location the center of the search area
+     * @return the messages which have below 10 units of distance from the center
+     * @throws
+     */
+    @ApiMethod(
+            name = "getAround",
+            path = "yellMessage/getAround",
+            httpMethod = ApiMethod.HttpMethod.GET)
+    public CollectionResponse<YellMessage> getAround(GeoPt location) throws NotFoundException {
+        Query<YellMessage> messages = ofy().load().type(YellMessage.class);
+        QueryResultIterator<YellMessage> queryIterator = messages.iterator();
+        List<YellMessage> yellMessageList = new ArrayList<YellMessage>();
+        logger.info("Looking for YellMessages around "+ location.getLongitude() +" " + location.getLatitude());
+        while (queryIterator.hasNext()) {
+            YellMessage temp = queryIterator.next();
+            if(5 > Math.sqrt(Math.abs(temp.getLocation().getLatitude() - location.getLatitude())+ (temp.getLocation().getLongitude() - location.getLongitude()))) {
+                yellMessageList.add(temp);
+            }
         }
         return CollectionResponse.<YellMessage>builder().setItems(yellMessageList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
     }
