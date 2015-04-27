@@ -1,10 +1,12 @@
 package com.slashyell.jxhernandez.slashyell;
 
-import android.location.LocationManager;
+import android.app.Activity;
+import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.example.johnny.myapplication.backend.yellMessageApi.YellMessageApi;
-import com.example.johnny.myapplication.backend.yellMessageApi.model.GeoPt;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.YellMessage;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -16,17 +18,19 @@ import java.io.IOException;
 /**
  * Created by scien_000 on 4/23/2015.
  */
-public class SendYell extends AsyncTask<Void, Void, Void>
+public class SendYell extends AsyncTask<Void, Void, YellMessage>
 {
 
     YellMessage myMessage;
+    Activity context;
 
-    public SendYell(YellMessage ym) {
+    public SendYell(Activity context, YellMessage ym) {
         myMessage = ym;
+        this.context = context;
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected YellMessage doInBackground(Void... params) {
         YellMessageApi.Builder builder = new YellMessageApi.Builder(AndroidHttp.newCompatibleTransport(),
                 new AndroidJsonFactory(), null)
                 .setRootUrl("http://10.0.2.2:8080/_ah/api/")
@@ -40,11 +44,19 @@ public class SendYell extends AsyncTask<Void, Void, Void>
         YellMessageApi myApi = builder.build();
 
         try {
-            myApi.insert(myMessage).execute();
+            return myApi.insert(myMessage).execute();
         } catch (IOException e) {
-            e.printStackTrace();
+            return null;
         }
+    }
 
-        return null;
+    @Override
+    protected void onPostExecute(YellMessage result) {
+        if (result != null) {
+            Toast.makeText(context, context.getResources().getString(R.string.post_success), Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(context, context.getResources().getString(R.string.post_failure), Toast.LENGTH_LONG).show();
+        }
+        context.finish();
     }
 }

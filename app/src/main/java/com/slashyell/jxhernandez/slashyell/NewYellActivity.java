@@ -36,6 +36,8 @@ public class NewYellActivity extends Activity {
 
     private Marker messageMarker;
 
+    private MenuItem sendButton;
+
     private EditText yellText;
     private GoogleMap map;
     private LocationManager gps;
@@ -98,6 +100,9 @@ public class NewYellActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_new_yell, menu);
+
+        sendButton = menu.findItem(R.id.action_send);
+
         return true;
     }
 
@@ -112,13 +117,15 @@ public class NewYellActivity extends Activity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_send) {
+            sendButton.setActionView(R.layout.actionbar_indeterminate_progress);
+            sendButton.setEnabled(false);
             sendYell();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void sendYell() {
+    private void sendYell() {
 
         String message = yellText.getText().toString();
         if (message.isEmpty()) {
@@ -137,8 +144,7 @@ public class NewYellActivity extends Activity {
         yellMessage.setMessage(message);
         yellMessage.setDate(new DateTime(new Date()));
 
-        new SendYell(yellMessage).execute();
-
-        this.finish();
+        // AsyncTask will terminate this activity when finished
+        new SendYell(this, yellMessage).execute();
     }
 }

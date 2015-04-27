@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.johnny.myapplication.backend.yellMessageApi.YellMessageApi;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.GeoPt;
@@ -124,6 +125,20 @@ public class MainActivity extends Activity {
         if (id == R.id.action_settings) {
             Intent settingsActivity = new Intent(this, SettingsActivity.class);
             startActivity(settingsActivity);
+            return true;
+        }
+        if (id == R.id.action_location_found) {
+            // Center the map on the users position
+            GeoPt current_location = MapUtils.getLocation(gps);
+            if (current_location != null) {
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(current_location.getLatitude(), current_location.getLongitude()), ZOOM_LEVEL));
+            } else {
+                Toast.makeText(this, getResources().getString(R.string.location_unavailable), Toast.LENGTH_LONG);
+            }
+            return true;
+        }
+        if (id == R.id.action_refresh) {
+            // Refresh the messages in the area
             return true;
         }
 

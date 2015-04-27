@@ -11,6 +11,9 @@
     <string name="new_yell_hint">What\'\s going on here?</string>
     <string name="username">Nickname</string>
     <string name="username_summary">Name used when leaving messages</string>
+    <string name="post_success">Post Successful!</string>
+    <string name="post_failure">There was a problem communicating with the server</string>
+    <string name="location_unavailable">Your location could not be detected</string>
 
 
 <!-- TODO: Remove or change this placeholder text -->
