@@ -1,6 +1,8 @@
 package com.example.johnny.myapplication.backend;
 
 import com.beoui.geocell.GeocellManager;
+import com.beoui.geocell.SearchResults;
+import com.beoui.geocell.model.GeocellQuery;
 import com.beoui.geocell.model.LocationCapable;
 import com.beoui.geocell.model.Point;
 import com.google.api.server.spi.config.Api;
@@ -107,14 +109,22 @@ public class YellMessageEndpoint {
     public CollectionResponse<YellMessage> getAround(GeoPt location) throws NotFoundException {
         Query<YellMessage> messages = ofy().load().type(YellMessage.class);
         QueryResultIterator<YellMessage> queryIterator = messages.iterator();
-        List<YellMessage> yellMessageList = new ArrayList<YellMessage>();
+        List<YellMessage> yellMessageList;
+        Point center = new Point(location.getLatitude(), location.getLongitude());
+        ObjectifyGeocellQueryEngine om = new ObjectifyGeocellQueryEngine(ofy(), "cells");
+
+        GeocellQuery query = new GeocellQuery();
+        yellMessageList = GeocellManager.proximitySearch(center, 40, 0.0,100.0, YellMessage.class, query, om, GeocellManager.MAX_GEOCELL_RESOLUTION).getResults();
+
+        /*
         logger.info("Looking for YellMessages around "+ location.getLongitude() +" " + location.getLatitude());
         while (queryIterator.hasNext()) {
             YellMessage temp = queryIterator.next();
-            if(5 > Math.sqrt(Math.abs(temp.getLocation().getLatitude() - location.getLatitude())+ (temp.getLocation().getLongitude() - location.getLongitude()))) {
+            if(5 > Math.sqrt(Math.pow(temp.getLocation().getLatitude() - location.getLatitude(),2))+ pow((temp.getLocation().getLongitude() - location.getLongitude()),2))
+            {
                 yellMessageList.add(temp);
             }
-        }
+        }*/
         return CollectionResponse.<YellMessage>builder().setItems(yellMessageList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
     }
 

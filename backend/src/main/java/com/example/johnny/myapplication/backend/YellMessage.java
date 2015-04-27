@@ -1,5 +1,8 @@
 package com.example.johnny.myapplication.backend;
 
+import com.beoui.geocell.annotations.Geocells;
+import com.beoui.geocell.annotations.Latitude;
+import com.beoui.geocell.annotations.Longitude;
 import com.beoui.geocell.model.BoundingBox;
 import com.google.appengine.api.datastore.GeoPt;
 import com.googlecode.objectify.Key;
@@ -29,7 +32,14 @@ public class YellMessage {
     Long opId;
     // A list of geohashed cells for better GeoQueries
     @Index
+    @Geocells
     List<String> cells;
+
+    @Latitude
+    double latitude;
+    @Longitude
+    double longitude;
+
 
     public YellMessage () {}
 
@@ -72,6 +82,23 @@ public class YellMessage {
     public List<String> getCells() { return cells; }
 
     public void setCells(List<String> cells) { this.cells = cells; }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+
+    public void setLatitude(double lantitude) {
+        this.latitude = lantitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
 
     public boolean isIn(BoundingBox bb) {
         return getLocation().getLatitude() < bb.getNorth()
