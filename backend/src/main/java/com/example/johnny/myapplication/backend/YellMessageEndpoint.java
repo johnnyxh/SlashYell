@@ -1,9 +1,7 @@
 package com.example.johnny.myapplication.backend;
 
 import com.beoui.geocell.GeocellManager;
-import com.beoui.geocell.SearchResults;
 import com.beoui.geocell.model.GeocellQuery;
-import com.beoui.geocell.model.LocationCapable;
 import com.beoui.geocell.model.Point;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
@@ -98,7 +96,8 @@ public class YellMessageEndpoint {
     /**
      * Returns the messages of the {@link YellMessage} around (5) the location given.
      *
-     * @param location the center of the search area
+     * @param longitude the center of the search area
+     * @param latitude fuck
      * @return the messages which have below 10 units of distance from the center
      * @throws
      */
@@ -106,15 +105,19 @@ public class YellMessageEndpoint {
             name = "getAround",
             path = "yellMessage/getAround",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public CollectionResponse<YellMessage> getAround(GeoPt location) throws NotFoundException {
+    public CollectionResponse<YellMessage> getAround(@Named("longitude") float longitude, @Named("latitude") float latitude) throws NotFoundException {
         Query<YellMessage> messages = ofy().load().type(YellMessage.class);
         QueryResultIterator<YellMessage> queryIterator = messages.iterator();
         List<YellMessage> yellMessageList;
-        Point center = new Point(location.getLatitude(), location.getLongitude());
+        Point center = new Point(longitude, latitude);
         ObjectifyGeocellQueryEngine om = new ObjectifyGeocellQueryEngine(ofy(), "cells");
 
         GeocellQuery query = new GeocellQuery();
-        yellMessageList = GeocellManager.proximitySearch(center, 40, 0.0,100.0, YellMessage.class, query, om, GeocellManager.MAX_GEOCELL_RESOLUTION).getResults();
+        yellMessageList = GeocellManager.proximitySearch(center, 40, 0.0, 100.0, YellMessage.class, query, om, GeocellManager.MAX_GEOCELL_RESOLUTION).getResults();
+
+        for (YellMessage t : yellMessageList) {
+            logger.info("ID of the message" + t.getUserId());
+        }
 
         /*
         logger.info("Looking for YellMessages around "+ location.getLongitude() +" " + location.getLatitude());
@@ -141,13 +144,9 @@ public class YellMessageEndpoint {
         // Objectify ID generator, e.g. long or String, then you should generate the unique ID yourself prior to saving.
         //
         // If your client provides the ID then you should probably use PUT instead.
-
-        // Create new point from lat/long coordinates
         Point p = new Point(yellMessage.getLocation().getLatitude(), yellMessage.getLocation().getLongitude());
-        // Store generated list of geocells
         List<String> cells = GeocellManager.generateGeoCell(p);
         yellMessage.setCells(cells);
-        logger.info("Geocells to be saved for Point("+p.getLat()+","+p.getLon()+") are: "+cells);
         ofy().save().entity(yellMessage).now();
         logger.info("Created YellMessage with ID: " + yellMessage.getId());
 

@@ -33,7 +33,7 @@ public class SendYell extends AsyncTask<Void, Void, YellMessage>
     protected YellMessage doInBackground(Void... params) {
         YellMessageApi.Builder builder = new YellMessageApi.Builder(AndroidHttp.newCompatibleTransport(),
                 new AndroidJsonFactory(), null)
-                .setRootUrl("http://10.0.2.2:8080/_ah/api/")
+                .setRootUrl("http://commote.net:8085/_ah/api/")
                 .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
                     @Override
                     public void initialize(AbstractGoogleClientRequest<?> abstractGoogleClientRequest) throws IOException {

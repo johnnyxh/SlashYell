@@ -14,6 +14,8 @@ import com.googlecode.objectify.annotation.Index;
 import java.util.Date;
 import java.util.List;
 
+import javax.jdo.annotations.PrimaryKey;
+
 /**
  * Created by johnny on 4/13/15.
  */
@@ -22,6 +24,7 @@ import java.util.List;
 public class YellMessage {
 
     @Id
+    @PrimaryKey
     Long id;
 
     String userId;
