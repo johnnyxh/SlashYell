@@ -147,6 +147,8 @@ public class YellMessageEndpoint {
         Point p = new Point(yellMessage.getLocation().getLatitude(), yellMessage.getLocation().getLongitude());
         List<String> cells = GeocellManager.generateGeoCell(p);
         yellMessage.setCells(cells);
+        yellMessage.setLatitude(yellMessage.getLocation().getLatitude());
+        yellMessage.setLongitude(yellMessage.getLocation().getLongitude());
         ofy().save().entity(yellMessage).now();
         logger.info("Created YellMessage with ID: " + yellMessage.getId());
 
