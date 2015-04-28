@@ -9,7 +9,6 @@ import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.api.server.spi.response.NotFoundException;
 import com.google.appengine.api.datastore.Cursor;
-import com.google.appengine.api.datastore.GeoPt;
 import com.google.appengine.api.datastore.QueryResultIterator;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.cmd.Query;
@@ -96,8 +95,8 @@ public class YellMessageEndpoint {
     /**
      * Returns the messages of the {@link YellMessage} around (5) the location given.
      *
-     * @param longitude the center of the search area
-     * @param latitude fuck
+     * @param latitude the center of the search area
+     * @param longitude fuck
      * @return the messages which have below 10 units of distance from the center
      * @throws
      */
@@ -105,15 +104,15 @@ public class YellMessageEndpoint {
             name = "getAround",
             path = "yellMessage/getAround",
             httpMethod = ApiMethod.HttpMethod.GET)
-    public CollectionResponse<YellMessage> getAround(@Named("longitude") float longitude, @Named("latitude") float latitude) throws NotFoundException {
+    public CollectionResponse<YellMessage> getAround(@Named("latitude") float latitude, @Named("longitude") float longitude) throws NotFoundException {
         Query<YellMessage> messages = ofy().load().type(YellMessage.class);
         QueryResultIterator<YellMessage> queryIterator = messages.iterator();
         List<YellMessage> yellMessageList;
-        Point center = new Point(longitude, latitude);
+        Point center = new Point(latitude, longitude);
         ObjectifyGeocellQueryEngine om = new ObjectifyGeocellQueryEngine(ofy(), "cells");
 
         GeocellQuery query = new GeocellQuery();
-        yellMessageList = GeocellManager.proximitySearch(center, 40, 0.0, 100.0, YellMessage.class, query, om, GeocellManager.MAX_GEOCELL_RESOLUTION).getResults();
+        yellMessageList = GeocellManager.proximitySearch(center, 40, 0.0, 1000.0, YellMessage.class, query, om, GeocellManager.MAX_GEOCELL_RESOLUTION).getResults();
 
         for (YellMessage t : yellMessageList) {
             logger.info("ID of the message" + t.getUserId());
