@@ -9,20 +9,22 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.MapFragment;
 import com.example.johnny.myapplication.backend.yellMessageApi.YellMessageApi;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.GeoPt;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.YellMessage;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -33,12 +35,17 @@ import com.google.api.client.util.DateTime;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements MessageReceiver{
 
     private static final float ZOOM_LEVEL = 16f;
+
+    private MenuItem refreshButton;
+    private View refreshView;
+    YellMessageWindowAdapter markerAdapter;
 
     private ImageButton newYellButton;
     private GoogleMap map;
@@ -64,46 +71,25 @@ public class MainActivity extends Activity {
         });
 
         map = ((MapFragment) getFragmentManager()
-                .findFragmentById(R.id.mapview)).getMap();
+                .findFragmentById(R.id.mapview)).getExtendedMap();
 
-        YellMessageWindowAdapter markerAdapter = new YellMessageWindowAdapter(this.getLayoutInflater());
+        markerAdapter = new YellMessageWindowAdapter(this.getLayoutInflater());
         map.setInfoWindowAdapter(markerAdapter);
 
         gps = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         yellList = (ListView) findViewById(R.id.yellList);
-        yellList.setEmptyView(findViewById(R.id.emptyElement));
 
-        ArrayList<YellMessage> testItems = new ArrayList<YellMessage>();
-
-        YellMessage test1 = new YellMessage();
-        test1.setUserId("Johnny Hernandez");
-        test1.setDate(new DateTime(new Date(), TimeZone.getTimeZone("EST")));
+        View emptyView = getLayoutInflater().inflate(R.layout.empty_yell_list,null);
+        ((ViewGroup)yellList.getParent()).addView(emptyView);
+        yellList.setEmptyView(emptyView);
 
         GeoPt myLocation = MapUtils.getLocation(gps);
-        if (myLocation != null)
-            test1.setLocation(MapUtils.getLocation(gps));
-
-        test1.setMessage("Look at this amazing list its cool right?");
-        testItems.add(test1);
-
-        YellMessage test2 = new YellMessage();
-        test2.setUserId("Johnny Hernandez");
-        test2.setDate(new DateTime(new Date(), TimeZone.getTimeZone("EST")));
-        if (myLocation != null)
-            test2.setLocation(MapUtils.getLocation(gps));
-
-        test2.setMessage("It looks like absolute trash");
-        testItems.add(test2);
-
-        ListAdapter testAdapter = new YellMessageListAdapter(this, R.layout.yell_item, testItems);
-        yellList.setAdapter(testAdapter);
 
         // Initial animation/zoom into users position
         if (myLocation != null)
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude(), gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude()), ZOOM_LEVEL));
 
-        MapUtils.addMessageToMap(map, test1, markerAdapter);
         //new EndPointAsyncTask().execute();
     }
 
@@ -111,6 +97,10 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        refreshButton = menu.findItem(R.id.action_refresh);
+        refreshView = refreshButton.getActionView();
+
         return true;
     }
 
@@ -138,7 +128,9 @@ public class MainActivity extends Activity {
             return true;
         }
         if (id == R.id.action_refresh) {
-            // Refresh the messages in the area
+            refreshButton.setActionView(R.layout.actionbar_indeterminate_progress);
+            refreshButton.setEnabled(false);
+            new GetYells(this).execute(MapUtils.getLocation(gps));
             return true;
         }
 
@@ -150,5 +142,25 @@ public class MainActivity extends Activity {
     private void createNewYell() {
         Intent newYellIntent = new Intent(this, NewYellActivity.class);
         startActivity(newYellIntent);
+    }
+
+    @Override
+    public void onMessagesReceived(List<YellMessage> messages) {
+        if (messages != null) {
+            Log.d("UPDATING", "WE GOT MAIL");
+            ListAdapter newMessageAdapter = new YellMessageListAdapter(this, R.layout.yell_item, messages);
+            yellList.setAdapter(newMessageAdapter);
+            for (YellMessage message : messages) {
+                MapUtils.addMessageToMap(map, message, markerAdapter);
+            }
+        } else {
+            Log.d("UPDATING", "NOTHING AROUND US");
+            messages = new ArrayList<YellMessage>();
+            ListAdapter newMessageAdapter = new YellMessageListAdapter(this, R.layout.yell_item, messages);
+            yellList.setAdapter(newMessageAdapter);
+        }
+
+        refreshButton.setActionView(refreshView);
+        refreshButton.setEnabled(true);
     }
 }

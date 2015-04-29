@@ -8,9 +8,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.johnny.myapplication.backend.yellMessageApi.model.YellMessage;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,24 +16,26 @@ import java.util.Locale;
 /**
  * Created by johnny on 4/23/15.
  */
-public class YellMessageWindowAdapter implements GoogleMap.InfoWindowAdapter {
+public class YellMessageWindowAdapter implements com.androidmapsextensions.GoogleMap.InfoWindowAdapter {
 
     private LayoutInflater inflater;
-    private YellMessage message;
     private Geocoder geocoder;
 
     public YellMessageWindowAdapter(LayoutInflater inflater) {
+
         this.inflater = inflater;
     }
 
     @Override
-    public View getInfoWindow(Marker marker) {
+    public View getInfoContents(com.androidmapsextensions.Marker marker) {
         return null;
     }
 
     @Override
-    public View getInfoContents(Marker marker) {
+    public View getInfoWindow(com.androidmapsextensions.Marker marker) {
         View v = inflater.inflate(R.layout.yell_infowindow, null);
+
+        YellMessage message = marker.getData();
 
         geocoder = new Geocoder(v.getContext(), Locale.getDefault());
 
@@ -58,9 +57,5 @@ public class YellMessageWindowAdapter implements GoogleMap.InfoWindowAdapter {
         commentField.setText(message.getMessage());
 
         return v;
-    }
-
-    public void setYellMessage(YellMessage message) {
-        this.message = message;
     }
 }

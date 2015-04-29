@@ -11,7 +11,7 @@
         android:layout_height="0dp"
         android:clickable="false"
         android:layout_weight="2"
-        class="com.google.android.gms.maps.MapFragment" />
+        class="com.androidmapsextensions.MapFragment" />
 
     <EditText
         android:id="@+id/yelltext"

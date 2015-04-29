@@ -18,15 +18,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.androidmapsextensions.GoogleMap;
+import com.androidmapsextensions.MapFragment;
+import com.androidmapsextensions.Marker;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.GeoPt;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.YellMessage;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.api.client.util.DateTime;
 
 import java.util.Date;
@@ -48,7 +46,7 @@ public class NewYellActivity extends Activity {
         setContentView(R.layout.activity_new_yell);
 
         map = ((MapFragment) getFragmentManager()
-                .findFragmentById(R.id.mapview)).getMap();
+                .findFragmentById(R.id.mapview)).getExtendedMap();
 
         // Disallow scrolling/zooming/etc
         map.getUiSettings().setAllGesturesEnabled(false);
