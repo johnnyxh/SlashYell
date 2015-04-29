@@ -22,7 +22,10 @@
             android:textSize="12dp"
             android:gravity="start"
             android:text="Johnny Hernandez"
-            android:layout_alignParentLeft="true" />
+            android:layout_alignParentLeft="true"
+            android:focusableInTouchMode="false"
+            android:clickable="false"
+            android:focusable="false"/>
 
         <TextView
             android:id="@+id/yell_item_time"
@@ -31,7 +34,10 @@
             android:textSize="12dp"
             android:paddingRight="4dp"
             android:layout_alignParentRight="true"
-            android:text="10:01PM" />
+            android:text="10:01PM"
+            android:focusableInTouchMode="false"
+            android:clickable="false"
+            android:focusable="false"/>
 
     </RelativeLayout>
 
@@ -42,7 +48,10 @@
         android:paddingTop="4dp"
         android:paddingLeft="8dp"
         android:text="We dem agu boyz"
-        android:layout_marginBottom="5dp" />
+        android:layout_marginBottom="5dp"
+        android:focusableInTouchMode="false"
+        android:clickable="false"
+        android:focusable="false"/>
 
     <TextView
         android:id="@+id/yell_item_location"
@@ -52,6 +61,9 @@
         android:textSize="12dp"
         android:paddingRight="4dp"
         android:paddingBottom="4dp"
-        android:text="Somewhere" />
+        android:text="Somewhere"
+        android:focusableInTouchMode="false"
+        android:clickable="false"
+        android:focusable="false"/>
 
 </LinearLayout>
