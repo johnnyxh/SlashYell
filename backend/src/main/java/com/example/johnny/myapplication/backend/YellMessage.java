@@ -30,6 +30,8 @@ public class YellMessage {
     String userId;
     String message;
     GeoPt location;
+    String textLocation;
+    @Index
     Date date;
     @Index
     Long opId;
@@ -65,6 +67,10 @@ public class YellMessage {
     public void setLocation(GeoPt location) {
         this.location = location;
     }
+
+    public String getTextLocation() { return this.textLocation; }
+
+    public void setTextLocation(String textLocation) { this.textLocation = textLocation; }
 
     public Long getId() {
         return this.id;

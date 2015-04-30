@@ -13,6 +13,7 @@ import java.util.StringTokenizer;
  */
 public class ObjectifyGeocellQueryEngine implements GeocellQueryEngine {
     private String geocellsProperty;
+    private String orderByProperty;
     private Objectify ofy;
     public static final String DEFAULT_GEOCELLS_PROPERTY = "geocells";
 
@@ -21,8 +22,13 @@ public class ObjectifyGeocellQueryEngine implements GeocellQueryEngine {
     }
 
     public ObjectifyGeocellQueryEngine(Objectify ofy, String geocellsProperty) {
+        this(ofy, geocellsProperty, null);
+    }
+
+    public ObjectifyGeocellQueryEngine(Objectify ofy, String geocellsProperty, String orderByProperty) {
         this.ofy = ofy;
         this.geocellsProperty = geocellsProperty;
+        this.orderByProperty = orderByProperty;
     }
 
     @Override
@@ -33,9 +39,13 @@ public class ObjectifyGeocellQueryEngine implements GeocellQueryEngine {
         if (baseQuery != null) {
             st = new StringTokenizer(baseQuery.getBaseQuery(), ",");
             while (st.hasMoreTokens()) {
-                query.filter(st.nextToken(), baseQuery.getParameters().get(tokenNo++));
+                query = query.filter(st.nextToken(), baseQuery.getParameters().get(tokenNo++));
             }
         }
-        return query.filter(geocellsProperty + " IN", geocells).list();
+        query = query.filter(geocellsProperty + " IN", geocells);
+        if (orderByProperty != null) {
+            query = query.order(orderByProperty);
+        }
+        return query.list();
     }
 }

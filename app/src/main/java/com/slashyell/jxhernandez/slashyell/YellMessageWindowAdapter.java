@@ -19,7 +19,6 @@ import java.util.Locale;
 public class YellMessageWindowAdapter implements com.androidmapsextensions.GoogleMap.InfoWindowAdapter {
 
     private LayoutInflater inflater;
-    private Geocoder geocoder;
 
     public YellMessageWindowAdapter(LayoutInflater inflater) {
 
@@ -37,8 +36,6 @@ public class YellMessageWindowAdapter implements com.androidmapsextensions.Googl
 
         YellMessage message = marker.getData();
 
-        geocoder = new Geocoder(v.getContext(), Locale.getDefault());
-
         TextView nameField = (TextView) v.findViewById(R.id.yell_window_name);
         TextView timeField = (TextView) v.findViewById(R.id.yell_window_time);
         TextView locationField = (TextView) v.findViewById(R.id.yell_window_location);
@@ -46,14 +43,7 @@ public class YellMessageWindowAdapter implements com.androidmapsextensions.Googl
 
         nameField.setText(message.getUserId());
         timeField.setText(DateUtils.getRelativeDateTimeString(v.getContext(), message.getDate().getValue(), DateUtils.SECOND_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, 0));
-        List<Address> addresses;
-        try {
-            addresses = geocoder.getFromLocation(message.getLocation().getLatitude(), message.getLocation().getLongitude(), 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-            String location = addresses.get(0).getAddressLine(0);
-            locationField.setText(location);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //locationField.setText(message.getTextLocation());
         commentField.setText(message.getMessage());
 
         return v;

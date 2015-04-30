@@ -4,7 +4,9 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.preference.PreferenceManager;
@@ -27,7 +29,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.api.client.util.DateTime;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 
 public class NewYellActivity extends Activity {
@@ -35,6 +40,8 @@ public class NewYellActivity extends Activity {
     private Marker messageMarker;
 
     private MenuItem sendButton;
+
+    private Geocoder geocoder;
 
     private EditText yellText;
     private GoogleMap map;
@@ -44,6 +51,8 @@ public class NewYellActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_yell);
+
+        geocoder = new Geocoder(this, Locale.getDefault());
 
         map = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.mapview)).getExtendedMap();
@@ -140,7 +149,14 @@ public class NewYellActivity extends Activity {
         userLocation.setLongitude((float)messageMarker.getPosition().longitude);
         yellMessage.setLocation(userLocation);
         yellMessage.setMessage(message);
-        yellMessage.setDate(new DateTime(new Date()));
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocation(messageMarker.getPosition().latitude, messageMarker.getPosition().longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            String location = addresses.get(0).getAddressLine(0);
+            //yellMessage.setTextLocation(location);
+        } catch (IOException e) {
+           // yellMessage.setTextLocation(getResources().getString(R.string.unknown_location));
+        }
 
         // AsyncTask will terminate this activity when finished
         new SendYell(this, yellMessage).execute();

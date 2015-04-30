@@ -14,6 +14,7 @@
     <string name="post_success">Post Successful!</string>
     <string name="post_failure">There was a problem communicating with the server</string>
     <string name="location_unavailable">Your location could not be detected</string>
+    <string name="unknown_location">Alternate Dimension</string>
 
 
 <!-- TODO: Remove or change this placeholder text -->

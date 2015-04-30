@@ -14,6 +14,7 @@ import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.cmd.Query;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -83,7 +84,7 @@ public class YellMessageEndpoint {
             httpMethod = ApiMethod.HttpMethod.GET)
     public CollectionResponse<YellMessage> getReplies(@Named("id") Long id) throws NotFoundException {
         logger.info("Getting replies to YellMessage with ID: " + id);
-        Query<YellMessage> replies = ofy().load().type(YellMessage.class).filter("opId", id);
+        Query<YellMessage> replies = ofy().load().type(YellMessage.class).filter("opId", id).order("-date");
         QueryResultIterator<YellMessage> queryIterator = replies.iterator();
         List<YellMessage> yellMessageList = new ArrayList<YellMessage>();
         while (queryIterator.hasNext()) {
@@ -109,7 +110,7 @@ public class YellMessageEndpoint {
         QueryResultIterator<YellMessage> queryIterator = messages.iterator();
         List<YellMessage> yellMessageList;
         Point center = new Point(latitude, longitude);
-        ObjectifyGeocellQueryEngine om = new ObjectifyGeocellQueryEngine(ofy(), "cells");
+        ObjectifyGeocellQueryEngine om = new ObjectifyGeocellQueryEngine(ofy(), "cells", "date");
 
         GeocellQuery query = new GeocellQuery();
         yellMessageList = GeocellManager.proximitySearch(center, 40, 0.0, 1000.0, YellMessage.class, query, om, GeocellManager.MAX_GEOCELL_RESOLUTION).getResults();
@@ -148,6 +149,7 @@ public class YellMessageEndpoint {
         yellMessage.setCells(cells);
         yellMessage.setLatitude(yellMessage.getLocation().getLatitude());
         yellMessage.setLongitude(yellMessage.getLocation().getLongitude());
+        yellMessage.setDate(new Date());
         ofy().save().entity(yellMessage).now();
         logger.info("Created YellMessage with ID: " + yellMessage.getId());
 
