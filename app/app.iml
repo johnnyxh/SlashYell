@@ -111,6 +111,7 @@
     <orderEntry type="library" exported="" name="android-maps-extensions-2.2.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-analytics-7.0.0" level="project" />
     <orderEntry type="library" exported="" name="google-http-client-jackson2-1.19.0" level="project" />
+    <orderEntry type="library" exported="" name="support-v13-22.0.0" level="project" />
     <orderEntry type="library" exported="" name="google-http-client-android-1.19.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-appstate-7.0.0" level="project" />
     <orderEntry type="library" exported="" name="guava-jdk5-13.0" level="project" />

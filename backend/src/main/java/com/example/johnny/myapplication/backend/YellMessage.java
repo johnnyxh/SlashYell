@@ -21,7 +21,7 @@ import javax.jdo.annotations.PrimaryKey;
  */
 
 @Entity
-public class YellMessage {
+public class YellMessage implements Comparable<YellMessage>{
 
     @Id
     @PrimaryKey
@@ -114,6 +114,23 @@ public class YellMessage {
                 && getLocation().getLatitude() > bb.getSouth()
                 && getLocation().getLongitude() > bb.getWest()
                 && getLocation().getLongitude() < bb.getEast();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        YellMessage that = (YellMessage) o;
+
+        if (!id.equals(that.id)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int compareTo(YellMessage another) {
+        return -(getDate().compareTo(another.getDate()));
     }
 
 }

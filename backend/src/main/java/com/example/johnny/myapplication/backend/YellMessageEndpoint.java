@@ -14,8 +14,11 @@ import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.cmd.Query;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
@@ -115,19 +118,16 @@ public class YellMessageEndpoint {
         GeocellQuery query = new GeocellQuery();
         yellMessageList = GeocellManager.proximitySearch(center, 40, 0.0, 1000.0, YellMessage.class, query, om, GeocellManager.MAX_GEOCELL_RESOLUTION).getResults();
 
+        // Work around for bug in geocells library, remove duplicates and order by date (newest first)
+        Set<YellMessage> noDuplicates= new LinkedHashSet<YellMessage>(yellMessageList);
+        yellMessageList.clear();
+        yellMessageList.addAll(noDuplicates);
+        Collections.sort(yellMessageList);
+
         for (YellMessage t : yellMessageList) {
             logger.info("ID of the message" + t.getUserId());
         }
 
-        /*
-        logger.info("Looking for YellMessages around "+ location.getLongitude() +" " + location.getLatitude());
-        while (queryIterator.hasNext()) {
-            YellMessage temp = queryIterator.next();
-            if(5 > Math.sqrt(Math.pow(temp.getLocation().getLatitude() - location.getLatitude(),2))+ pow((temp.getLocation().getLongitude() - location.getLongitude()),2))
-            {
-                yellMessageList.add(temp);
-            }
-        }*/
         return CollectionResponse.<YellMessage>builder().setItems(yellMessageList).setNextPageToken(queryIterator.getCursor().toWebSafeString()).build();
     }
 

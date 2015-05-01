@@ -153,9 +153,9 @@ public class NewYellActivity extends Activity {
         try {
             addresses = geocoder.getFromLocation(messageMarker.getPosition().latitude, messageMarker.getPosition().longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
             String location = addresses.get(0).getAddressLine(0);
-            //yellMessage.setTextLocation(location);
+            yellMessage.setTextLocation(location);
         } catch (IOException e) {
-           // yellMessage.setTextLocation(getResources().getString(R.string.unknown_location));
+            yellMessage.setTextLocation(getResources().getString(R.string.unknown_location));
         }
 
         // AsyncTask will terminate this activity when finished
