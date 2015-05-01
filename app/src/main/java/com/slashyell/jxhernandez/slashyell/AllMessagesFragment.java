@@ -36,7 +36,7 @@ import java.util.Map;
  * Use the {@link AllMessagesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AllMessagesFragment extends Fragment {
+public class AllMessagesFragment extends MapFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -94,17 +94,16 @@ public class AllMessagesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.fragment_main_view, container, false);
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
 
         idMarkerMap = new HashMap<Long, Marker>();
 
-        map = ((MapFragment) getFragmentManager()
-                .findFragmentById(R.id.mapview)).getExtendedMap();
+        map = this.getExtendedMap();
 
         markerAdapter = new YellMessageWindowAdapter(inflater);
         map.setInfoWindowAdapter(markerAdapter);
 
+        /*
         yellList = (ListView) rootView.findViewById(R.id.yellList);
 
         View emptyView = inflater.inflate(R.layout.empty_yell_list, null);
@@ -121,6 +120,8 @@ public class AllMessagesFragment extends Fragment {
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(messageMarker.getPosition(), ZOOM_LEVEL_MESSAGE));
             }
         });
+
+        */
 
         /*
         // Initial animation/zoom into users position
@@ -184,8 +185,8 @@ public class AllMessagesFragment extends Fragment {
     public void refreshMessages(List<YellMessage> messages) {
         idMarkerMap.clear();
         if (messages != null) {
-            ListAdapter newMessageAdapter = new YellMessageListAdapter(this.getActivity(), R.layout.yell_item, messages);
-            yellList.setAdapter(newMessageAdapter);
+           // ListAdapter newMessageAdapter = new YellMessageListAdapter(this.getActivity(), R.layout.yell_item, messages);
+            //yellList.setAdapter(newMessageAdapter);
             for (YellMessage message : messages) {
                 idMarkerMap.put(message.getId(), MapUtils.addMessageToMap(map, message, markerAdapter));
             }
