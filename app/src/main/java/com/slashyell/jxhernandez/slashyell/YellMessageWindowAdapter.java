@@ -43,7 +43,7 @@ public class YellMessageWindowAdapter implements com.androidmapsextensions.Googl
 
         nameField.setText(message.getUserId());
         timeField.setText(DateUtils.getRelativeDateTimeString(v.getContext(), message.getDate().getValue(), DateUtils.SECOND_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, 0));
-        //locationField.setText(message.getTextLocation());
+        locationField.setText(message.getTextLocation());
         commentField.setText(message.getMessage());
 
         return v;
