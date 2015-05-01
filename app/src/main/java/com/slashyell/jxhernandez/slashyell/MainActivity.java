@@ -151,6 +151,15 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
             fragments[1] = new AllRepliesFragment();
         }
 
+        // Overlap effect
+        @Override
+        public float getPageWidth(int position) {
+            if (position == 0) {
+                return 0.95f;
+            }
+            return 1f;
+        }
+
         @Override
         public Fragment getItem(int position) {
             return fragments[position];

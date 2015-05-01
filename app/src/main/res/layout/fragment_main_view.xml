@@ -1,8 +1,7 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/messages_fragment"
     tools:context="com.slashyell.jxhernandez.slashyell.AllRepliesFragment">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -37,4 +36,4 @@
 
     </RelativeLayout>
 
-</fragment>
+</FrameLayout>
