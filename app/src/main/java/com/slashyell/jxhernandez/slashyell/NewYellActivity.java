@@ -55,7 +55,7 @@ public class NewYellActivity extends Activity {
         geocoder = new Geocoder(this, Locale.getDefault());
 
         map = ((MapFragment) getFragmentManager()
-                .findFragmentById(R.id.mapview)).getExtendedMap();
+                .findFragmentById(R.id.newyell_mapview)).getExtendedMap();
 
         // Disallow scrolling/zooming/etc
         map.getUiSettings().setAllGesturesEnabled(false);
