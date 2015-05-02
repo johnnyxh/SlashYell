@@ -42,34 +42,6 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Setting custom action bars
-        ActionBar actionBar = getActionBar();
-        actionBar.setCustomView(R.layout.main_actionbar_top); //load your layout
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM); //show it
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); // Set navigation tabs depecrated in API 21+
-
-        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // show the given tab
-            }
-
-            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // hide the given tab
-            }
-
-            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // probably ignore this event
-            }
-        };
-
-
-        // Setting the tabs just to see how they look
-        actionBar.addTab(actionBar.newTab().setText("AROUND YOU")
-                .setTabListener(tabListener));
-        actionBar.addTab(actionBar.newTab().setText("REPLIES")
-                .setTabListener(tabListener));
-
-
         newYellButton = (ImageButton) findViewById(R.id.new_yell);
         newYellButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +54,29 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
 
         pagerAdapter = new ScreenSlidePagerAdapter(getFragmentManager());
         pager.setAdapter(pagerAdapter);
+
+        // Setting custom action bars
+        ActionBar actionBar = getActionBar();
+        actionBar.setCustomView(R.layout.main_actionbar_top); //load your layout
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM); //show it
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); // Set navigation tabs depecrated in API 21+
+
+        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+                pager.setCurrentItem(tab.getPosition());
+            }
+
+            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {}
+
+            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {}
+        };
+
+
+        // Setting the tabs just to see how they look
+        actionBar.addTab(actionBar.newTab().setText("AROUND YOU")
+                .setTabListener(tabListener));
+        actionBar.addTab(actionBar.newTab().setText("REPLIES")
+                .setTabListener(tabListener));
 
         gps = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
