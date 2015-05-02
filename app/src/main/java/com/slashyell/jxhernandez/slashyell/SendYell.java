@@ -23,9 +23,15 @@ public class SendYell extends AsyncTask<Void, Void, YellMessage>
 
     YellMessage myMessage;
     Activity context;
+    boolean closeAfter = true;
 
     public SendYell(Activity context, YellMessage ym) {
         myMessage = ym;
+        this.context = context;
+    }
+    public SendYell(Activity context, YellMessage ym, boolean close) {
+        myMessage = ym;
+        closeAfter = close;
         this.context = context;
     }
 
@@ -57,6 +63,7 @@ public class SendYell extends AsyncTask<Void, Void, YellMessage>
         } else {
             Toast.makeText(context, context.getResources().getString(R.string.post_failure), Toast.LENGTH_LONG).show();
         }
-        context.finish();
+        if (closeAfter)
+            context.finish();
     }
 }

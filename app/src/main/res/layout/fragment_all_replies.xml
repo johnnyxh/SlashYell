@@ -33,25 +33,27 @@
             android:paddingLeft="3dp"
             >
 
+
+
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#AFBDFA">
-            <TextView
-                android:id="@+id/reply_fragment_main_post_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:text="Johnny Hernandez" />
+                <TextView
+                    android:id="@+id/reply_fragment_main_post_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:text="Johnny Hernandez" />
 
-            <TextView
-                android:id="@+id/reply_fragment_main_post_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:text="3 seconds ago, 10:01PM" />
+                <TextView
+                    android:id="@+id/reply_fragment_main_post_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:text="3 seconds ago, 10:01PM" />
 
             </RelativeLayout>
 
@@ -74,6 +76,13 @@
 
 
         </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="#aaa">
+
+        </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"

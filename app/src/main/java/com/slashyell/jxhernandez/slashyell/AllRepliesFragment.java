@@ -174,50 +174,53 @@ public class AllRepliesFragment extends Fragment {
     public void createReply() {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         //final EditText editText = (EditText)view.findViewById(R.id.editText1);
-        new AlertDialog.Builder(getActivity())
-                .setTitle("Input a message")
-                .setView(inflater.inflate(R.layout.new_reply_dialog,null))
-                .setPositiveButton("POST",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if(originalPost == null)return;
-                                EditText messageEditText = (EditText)getActivity().findViewById(R.id.reply_dialog_message);
-                                String message = messageEditText.getText().toString();
-                                if (message.isEmpty()) {
-                                    return;
-                                }
-
-                                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                                String displayName = sharedPref.getString(SettingsActivity.DISPLAY_NAME, "Anon");
-
-                                YellMessage yellMessage = new YellMessage();
-                                yellMessage.setUserId(displayName);
-                                /*
-                                GeoPt userLocation = new GeoPt();
-                                userLocation.setLatitude((float)messageMarker.getPosition().latitude);
-                                userLocation.setLongitude((float)messageMarker.getPosition().longitude);
-                                yellMessage.setLocation(userLocation);
-                                */
-                                yellMessage.setMessage(message);
-                                /*
-                                List<Address> addresses;
-                                try {
-                                    addresses = geocoder.getFromLocation(messageMarker.getPosition().latitude, messageMarker.getPosition().longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                                    String location = addresses.get(0).getAddressLine(0);
-                                    yellMessage.setTextLocation(location);
-                                } catch (IOException e) {
-                                    yellMessage.setTextLocation(getResources().getString(R.string.unknown_location));
-                                }
-                                */
-                                // AsyncTask will terminate this activity when finished
-                                yellMessage.setOpId(originalPost.getId());
-                                //new SendYell(getActivity(), yellMessage).execute();
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Input a message");
+        final View v = inflater.inflate(R.layout.new_reply_dialog, null);
+        builder.setView(v);
+        builder.setPositiveButton("POST",
+                new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(originalPost == null)return;
+                            EditText messageEditText = (EditText) v.findViewById(R.id.reply_dialog_message);
+                            String message = messageEditText.getText().toString();
+                            if (message.isEmpty()) {
+                                return;
                             }
 
-                        })
-                .show();
+                            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                            String displayName = sharedPref.getString(SettingsActivity.DISPLAY_NAME, "Anon");
+
+                            YellMessage yellMessage = new YellMessage();
+                            yellMessage.setUserId(displayName);
+                            /*
+                            GeoPt userLocation = new GeoPt();
+                            userLocation.setLatitude((float)messageMarker.getPosition().latitude);
+                            userLocation.setLongitude((float)messageMarker.getPosition().longitude);
+                            yellMessage.setLocation(userLocation);
+                            */
+                            yellMessage.setMessage(message);
+                            /*
+                            List<Address> addresses;
+                            try {
+                                addresses = geocoder.getFromLocation(messageMarker.getPosition().latitude, messageMarker.getPosition().longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                String location = addresses.get(0).getAddressLine(0);
+                                yellMessage.setTextLocation(location);
+                            } catch (IOException e) {
+                                yellMessage.setTextLocation(getResources().getString(R.string.unknown_location));
+                            }
+                            */
+                            // AsyncTask will terminate this activity when finished
+                            yellMessage.setLocation(new GeoPt().setLatitude(0f).setLongitude(0f));
+                            yellMessage.setOpId(originalPost.getId());
+                            new SendYell(getActivity(), yellMessage, false).execute();
+
+                        }
+
+                });
+
+        builder.show();
     }
 
 }
