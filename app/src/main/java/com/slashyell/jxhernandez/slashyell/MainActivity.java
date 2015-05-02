@@ -67,10 +67,11 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
                     newYellButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            newYellButton.setImageDrawable(getDrawable("@drawable/new_yell"));
                             createNewYell();
                         }
                     });
+                    newYellButton.setImageResource(R.drawable.new_yell);
+                    newYellButton.invalidate();
                     locationButton.setVisible(true);
                     locationButton.setEnabled(true);
                 }
@@ -78,10 +79,11 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
                     newYellButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            newYellButton.setImageDrawable(getDrawable("@drawable/new_yell")); // TODO
                             createNewReply();
                         }
                     });
+                    newYellButton.setImageResource(R.drawable.reply);
+                    newYellButton.invalidate();
                     locationButton.setVisible(false);
                     locationButton.setEnabled(false);
                 }
