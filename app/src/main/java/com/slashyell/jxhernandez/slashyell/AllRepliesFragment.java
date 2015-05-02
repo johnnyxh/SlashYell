@@ -17,7 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.johnny.myapplication.backend.yellMessageApi.model.GeoPt;
@@ -47,6 +50,9 @@ public class AllRepliesFragment extends Fragment {
     private String mParam2;
 
     private YellMessage originalPost;
+
+    private RelativeLayout noMessageContainer;
+    private LinearLayout messageContainer;
 
     private TextView originalPostName;
     private TextView originalPostTime;
@@ -95,6 +101,11 @@ public class AllRepliesFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_all_replies, container, false);
 
         yellRepliesList = (ListView) rootView.findViewById(R.id.yellList);
+
+        noMessageContainer = (RelativeLayout) rootView.findViewById(R.id.reply_no_message);
+        messageContainer = (LinearLayout) rootView.findViewById(R.id.reply_content_message);
+
+
 
         View emptyView = inflater.inflate(R.layout.empty_yell_list, null);
         ((ViewGroup)yellRepliesList.getParent()).addView(emptyView);
@@ -152,6 +163,8 @@ public class AllRepliesFragment extends Fragment {
 
     public void updateOriginalPost(YellMessage message) {
         this.originalPost = message;
+        noMessageContainer.setVisibility(View.GONE);
+        messageContainer.setVisibility(View.VISIBLE);
         originalPostName.setText(message.getUserId());
         originalPostTime.setText(DateUtils.getRelativeDateTimeString(getActivity(), message.getDate().getValue(), DateUtils.SECOND_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, 0));
         originalPostMessage.setText(message.getMessage());
