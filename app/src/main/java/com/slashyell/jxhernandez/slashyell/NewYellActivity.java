@@ -26,6 +26,7 @@ import com.androidmapsextensions.Marker;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.GeoPt;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.YellMessage;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.api.client.util.DateTime;
 
@@ -57,14 +58,29 @@ public class NewYellActivity extends Activity {
         map = ((MapFragment) getFragmentManager()
                 .findFragmentById(R.id.newyell_mapview)).getExtendedMap();
 
-        // Disallow scrolling/zooming/etc
-        map.getUiSettings().setAllGesturesEnabled(false);
+        // Disallow scrolling/etc
+        map.getUiSettings().setScrollGesturesEnabled(false);
+
+
+        gps = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        final GeoPt myLocation = MapUtils.getLocation(gps);
+
+
+        map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            LatLng lastPos;
+
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+                if (!cameraPosition.target.equals(lastPos)) {
+                    map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(myLocation.getLatitude(), myLocation.getLongitude())));
+                    lastPos = cameraPosition.target;
+                }
+            }
+        });
 
         yellText = (EditText) findViewById(R.id.yelltext);
 
-        gps = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        final GeoPt myLocation = MapUtils.getLocation(gps);
 
         if (myLocation != null) {
             //TODO: Might want the ZOOM_LEVEL constant accessible somewhere else. Hardcoded right now
