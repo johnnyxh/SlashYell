@@ -87,7 +87,7 @@ public class YellMessageEndpoint {
             httpMethod = ApiMethod.HttpMethod.GET)
     public CollectionResponse<YellMessage> getReplies(@Named("id") Long id) throws NotFoundException {
         logger.info("Getting replies to YellMessage with ID: " + id);
-        Query<YellMessage> replies = ofy().load().type(YellMessage.class).filter("opId", id).order("-date");
+        Query<YellMessage> replies = ofy().load().type(YellMessage.class).filter("opId", id).order("date");
         QueryResultIterator<YellMessage> queryIterator = replies.iterator();
         List<YellMessage> yellMessageList = new ArrayList<YellMessage>();
         while (queryIterator.hasNext()) {
@@ -115,7 +115,9 @@ public class YellMessageEndpoint {
         Point center = new Point(latitude, longitude);
         ObjectifyGeocellQueryEngine om = new ObjectifyGeocellQueryEngine(ofy(), "cells", "date");
 
-        GeocellQuery query = new GeocellQuery();
+        List<Object> params = new ArrayList<Object>();
+        params.add(null);
+        GeocellQuery query = new GeocellQuery("opId == opIdParam", "Long opIdParam", params);
         yellMessageList = GeocellManager.proximitySearch(center, 40, 0.0, 1000.0, YellMessage.class, query, om, GeocellManager.MAX_GEOCELL_RESOLUTION).getResults();
 
         // Work around for bug in geocells library, remove duplicates and order by date (newest first)
