@@ -172,22 +172,12 @@ public class AllRepliesFragment extends Fragment {
         }
     }
     public void createReply() {
-<<<<<<< HEAD
         LayoutInflater inflater = getActivity().getLayoutInflater();
         //final EditText editText = (EditText)view.findViewById(R.id.editText1);
         new AlertDialog.Builder(getActivity())
                 .setTitle("Input a message")
                 .setView(inflater.inflate(R.layout.new_reply_dialog,null))
                 .setPositiveButton("POST",
-=======
-        LayoutInflater inflater = LayoutInflater.from(getActivity().getApplicationContext());
-        View view = inflater.inflate(R.layout.fragment_all_replies , null);
-        //final EditText editText = (EditText)view.findViewById(R.id.editText1);
-        new AlertDialog.Builder(getActivity().getApplicationContext())
-                .setTitle("Input a message")
-                //.setView(view)
-                .setPositiveButton("OK",
->>>>>>> 439e19811df884e9d3848e55c7e34b986a5abd65
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
