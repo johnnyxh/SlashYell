@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.preference.PreferenceManager;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.johnny.myapplication.backend.yellMessageApi.model.GeoPt;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.YellMessage;
@@ -44,6 +46,11 @@ public class AllRepliesFragment extends Fragment {
     private String mParam2;
 
     private YellMessage originalPost;
+
+    private TextView originalPostName;
+    private TextView originalPostTime;
+    private TextView originalPostMessage;
+    private TextView originalPostLocation;
 
     private ListView yellRepliesList;
 
@@ -101,14 +108,13 @@ public class AllRepliesFragment extends Fragment {
             }
         });
 
-        return rootView;
-    }
+        originalPostName = (TextView) rootView.findViewById(R.id.reply_fragment_main_post_name);
+        originalPostTime = (TextView) rootView.findViewById(R.id.reply_fragment_main_post_time);
+        originalPostMessage = (TextView) rootView.findViewById(R.id.reply_fragment_main_post_message);
+        originalPostLocation = (TextView) rootView.findViewById(R.id.reply_fragment_main_post_location);
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onReplyFragmentInteraction(uri);
-        }
+
+        return rootView;
     }
 
     @Override
@@ -140,26 +146,48 @@ public class AllRepliesFragment extends Fragment {
      */
     public interface OnRepliesInteractionListener {
         // TODO: Update argument type and name
-        public void onReplyFragmentInteraction(Uri uri);
+        public void onReplyFragmentInteraction(Long id);
     }
 
     public void updateOriginalPost(YellMessage message) {
         this.originalPost = message;
-        Log.d("OP Post", message.getMessage());
+        originalPostName.setText(message.getUserId());
+        originalPostTime.setText(DateUtils.getRelativeDateTimeString(getActivity(), message.getDate().getValue(), DateUtils.SECOND_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, 0));
+        originalPostMessage.setText(message.getMessage());
+        originalPostLocation.setText(message.getTextLocation());
+        mListener.onReplyFragmentInteraction(message.getId());
     }
 
-    public void updateReplies() {
+    public Long getOriginalPost() {
         if (originalPost != null) {
-            // Im gonna write the update code in a second
+            return this.originalPost.getId();
+        }
+        return new Long(-1);
+    }
+
+    public void updateReplies(List<YellMessage> replies) {
+        if (replies != null) {
+            YellMessageListAdapter listAdapter = new YellMessageListAdapter(getActivity(), R.layout.yell_item, replies);
+            yellRepliesList.setAdapter(listAdapter);
         }
     }
     public void createReply() {
+<<<<<<< HEAD
         LayoutInflater inflater = getActivity().getLayoutInflater();
         //final EditText editText = (EditText)view.findViewById(R.id.editText1);
         new AlertDialog.Builder(getActivity())
                 .setTitle("Input a message")
                 .setView(inflater.inflate(R.layout.new_reply_dialog,null))
                 .setPositiveButton("POST",
+=======
+        LayoutInflater inflater = LayoutInflater.from(getActivity().getApplicationContext());
+        View view = inflater.inflate(R.layout.fragment_all_replies , null);
+        //final EditText editText = (EditText)view.findViewById(R.id.editText1);
+        new AlertDialog.Builder(getActivity().getApplicationContext())
+                .setTitle("Input a message")
+                //.setView(view)
+                .setPositiveButton("OK",
+>>>>>>> 439e19811df884e9d3848e55c7e34b986a5abd65
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

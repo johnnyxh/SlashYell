@@ -37,10 +37,13 @@ public class ObjectifyGeocellQueryEngine implements GeocellQueryEngine {
         int tokenNo = 0;
         Query<T> query = ofy.load().type(entityClass);
         if (baseQuery != null) {
+            /*
             st = new StringTokenizer(baseQuery.getBaseQuery(), ",");
             while (st.hasMoreTokens()) {
                 query = query.filter(st.nextToken(), baseQuery.getParameters().get(tokenNo++));
             }
+            */
+            query = query.filter("opId", null);
         }
         query = query.filter(geocellsProperty + " IN", geocells);
         if (orderByProperty != null) {
