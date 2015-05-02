@@ -11,7 +11,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -136,7 +135,14 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onMapFragmentInteraction(YellMessage message) {
+        // Actually get replies and display
+        ((AllRepliesFragment) pagerAdapter.getItem(1)).updateOriginalPost(message);
+        pager.setCurrentItem(1, true);
+    }
+
+    @Override
+    public void onReplyFragmentInteraction(Uri uri) {
 
     }
 
