@@ -7,16 +7,19 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.johnny.myapplication.backend.yellMessageApi.model.GeoPt;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.YellMessage;
@@ -80,6 +83,39 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
         });
 
         pager = (ViewPager) findViewById(R.id.main_activity_pager);
+        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i2) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                if (i == 0) {
+                    newYellButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            newYellButton.setImageDrawable(getDrawable("@drawable/new_yell"));
+                            createNewYell();
+                        }
+                    });
+                }
+                else if (i == 1) {
+                    newYellButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            newYellButton.setImageDrawable(getDrawable("@drawable/new_yell")); // TODO
+                            createNewReply();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
 
         pagerAdapter = new ScreenSlidePagerAdapter(getFragmentManager());
         pager.setAdapter(pagerAdapter);
@@ -149,6 +185,8 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
             fragments = new Fragment[2];
             fragments[0] = new AllMessagesFragment();
             fragments[1] = new AllRepliesFragment();
+
+
         }
 
         // Overlap effect
@@ -162,6 +200,10 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
 
         @Override
         public Fragment getItem(int position) {
+            Log.e("Pager", "position: " + position);
+
+
+
             return fragments[position];
         }
 
@@ -174,5 +216,14 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
     private void createNewYell() {
         Intent newYellIntent = new Intent(this, NewYellActivity.class);
         startActivity(newYellIntent);
+    }
+
+    private void createNewReply() {
+
+    }
+
+    private Drawable getDrawable(String d) {
+        int imageResource = getResources().getIdentifier(d, null, getPackageName());
+        return getResources().getDrawable(imageResource);
     }
 }
