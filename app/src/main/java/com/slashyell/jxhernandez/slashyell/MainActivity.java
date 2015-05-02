@@ -7,15 +7,18 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.johnny.myapplication.backend.yellMessageApi.model.GeoPt;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.YellMessage;
@@ -42,6 +45,53 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Setting custom action bars
+        final ActionBar actionBar = getActionBar();
+
+        pager = (ViewPager) findViewById(R.id.main_activity_pager);
+        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i2) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                actionBar.setSelectedNavigationItem(i);
+                if (i == 0) {
+                    newYellButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            newYellButton.setImageDrawable(getDrawable("@drawable/new_yell"));
+                            createNewYell();
+                        }
+                    });
+                }
+                else if (i == 1) {
+                    newYellButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            newYellButton.setImageDrawable(getDrawable("@drawable/new_yell")); // TODO
+                            createNewReply();
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+
+        pagerAdapter = new ScreenSlidePagerAdapter(getFragmentManager());
+        pager.setAdapter(pagerAdapter);
+
+
+        actionBar.setCustomView(R.layout.main_actionbar_top); //load your layout
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM); //show it
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); // Set navigation tabs depecrated in API 21+
+
         newYellButton = (ImageButton) findViewById(R.id.new_yell);
         newYellButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,17 +99,6 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
                 createNewYell();
             }
         });
-
-        pager = (ViewPager) findViewById(R.id.main_activity_pager);
-
-        pagerAdapter = new ScreenSlidePagerAdapter(getFragmentManager());
-        pager.setAdapter(pagerAdapter);
-
-        // Setting custom action bars
-        ActionBar actionBar = getActionBar();
-        actionBar.setCustomView(R.layout.main_actionbar_top); //load your layout
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM); //show it
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS); // Set navigation tabs depecrated in API 21+
 
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
@@ -77,6 +116,7 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
                 .setTabListener(tabListener));
         actionBar.addTab(actionBar.newTab().setText("REPLIES")
                 .setTabListener(tabListener));
+
 
         gps = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -150,6 +190,8 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
             fragments = new Fragment[2];
             fragments[0] = new AllMessagesFragment();
             fragments[1] = new AllRepliesFragment();
+
+
         }
 
         // Overlap effect
@@ -163,6 +205,10 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
 
         @Override
         public Fragment getItem(int position) {
+            Log.e("Pager", "position: " + position);
+
+
+
             return fragments[position];
         }
 
@@ -175,5 +221,14 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
     private void createNewYell() {
         Intent newYellIntent = new Intent(this, NewYellActivity.class);
         startActivity(newYellIntent);
+    }
+
+    private void createNewReply() {
+        ((AllRepliesFragment) pagerAdapter.getItem(1)).createReply();
+    }
+
+    private Drawable getDrawable(String d) {
+        int imageResource = getResources().getIdentifier(d, null, getPackageName());
+        return getResources().getDrawable(imageResource);
     }
 }
