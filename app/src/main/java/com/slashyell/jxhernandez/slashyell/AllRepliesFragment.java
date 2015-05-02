@@ -1,17 +1,28 @@
 package com.slashyell.jxhernandez.slashyell;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.location.Address;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 
+import com.example.johnny.myapplication.backend.yellMessageApi.model.GeoPt;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.YellMessage;
+
+import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -141,6 +152,21 @@ public class AllRepliesFragment extends Fragment {
         if (originalPost != null) {
             // Im gonna write the update code in a second
         }
+    }
+    public void createReply() {
+        LayoutInflater inflater = LayoutInflater.from(getActivity().getApplicationContext());
+        View view = inflater.inflate(R.layout.fragment_all_replies , null);
+        final EditText editText = (EditText)view.findViewById(R.id.editText1);
+        new AlertDialog.Builder(getActivity().getApplicationContext())
+                .setTitle("Input a message")
+                .setView(view)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                .show();
     }
 
 }
