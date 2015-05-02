@@ -8,7 +8,7 @@
     <string name="action_location">My Position</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_send">Send</string>
-    <string name="new_yell_hint">What\'\s going on here?</string>
+    <string name="new_yell_hint">What\'s going on here?</string>
     <string name="username">Nickname</string>
     <string name="username_summary">Name used when leaving messages</string>
     <string name="post_success">Post Successful!</string>
