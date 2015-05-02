@@ -54,8 +54,6 @@ public class AllMessagesFragment extends MapFragment {
     private Map<Long, Marker> idMarkerMap;
 
     private GoogleMap map;
-    private LocationManager gps;
-    private ListView yellList;
 
     private OnMessagesInteractionListener mListener;
 
@@ -103,25 +101,12 @@ public class AllMessagesFragment extends MapFragment {
         markerAdapter = new YellMessageWindowAdapter(inflater);
         map.setInfoWindowAdapter(markerAdapter);
 
-        /*
-        yellList = (ListView) rootView.findViewById(R.id.yellList);
-
-        View emptyView = inflater.inflate(R.layout.empty_yell_list, null);
-        ((ViewGroup)yellList.getParent()).addView(emptyView);
-        yellList.setEmptyView(emptyView);
-        yellList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
-        yellList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                YellMessage message = (YellMessage) yellList.getItemAtPosition(position);
-                Marker messageMarker = idMarkerMap.get(message.getId());
-                messageMarker.showInfoWindow();
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(messageMarker.getPosition(), ZOOM_LEVEL_MESSAGE));
+            public void onInfoWindowClick(Marker marker) {
+                mListener.onMapFragmentInteraction((YellMessage) marker.getData());
             }
         });
-
-        */
 
         /*
         // Initial animation/zoom into users position
@@ -133,13 +118,6 @@ public class AllMessagesFragment extends MapFragment {
 
         return rootView;
 
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -171,7 +149,7 @@ public class AllMessagesFragment extends MapFragment {
      */
     public interface OnMessagesInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        public void onMapFragmentInteraction(YellMessage message);
     }
 
     public void locationFound(GeoPt center) {
@@ -185,8 +163,6 @@ public class AllMessagesFragment extends MapFragment {
     public void refreshMessages(List<YellMessage> messages) {
         idMarkerMap.clear();
         if (messages != null) {
-           // ListAdapter newMessageAdapter = new YellMessageListAdapter(this.getActivity(), R.layout.yell_item, messages);
-            //yellList.setAdapter(newMessageAdapter);
             for (YellMessage message : messages) {
                 idMarkerMap.put(message.getId(), MapUtils.addMessageToMap(map, message, markerAdapter));
             }
