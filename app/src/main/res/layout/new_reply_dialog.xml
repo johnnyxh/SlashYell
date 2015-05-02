@@ -6,6 +6,7 @@
     <EditText
         android:id = "@+id/reply_dialog_message"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:maxLength="200"/>
 
 </LinearLayout>

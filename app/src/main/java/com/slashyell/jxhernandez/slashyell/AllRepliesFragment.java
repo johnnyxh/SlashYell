@@ -24,6 +24,7 @@ import com.example.johnny.myapplication.backend.yellMessageApi.model.GeoPt;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.YellMessage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -168,6 +169,9 @@ public class AllRepliesFragment extends Fragment {
     public void updateReplies(List<YellMessage> replies) {
         if (replies != null) {
             YellMessageListAdapter listAdapter = new YellMessageListAdapter(getActivity(), R.layout.yell_item, replies);
+            yellRepliesList.setAdapter(listAdapter);
+        } else {
+            YellMessageListAdapter listAdapter = new YellMessageListAdapter(getActivity(), R.layout.yell_item, new ArrayList<YellMessage>());
             yellRepliesList.setAdapter(listAdapter);
         }
     }

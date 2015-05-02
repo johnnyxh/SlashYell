@@ -195,15 +195,29 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
     }
 
     @Override
-    public void onMapFragmentInteraction(YellMessage message) {
+    public void onMapFragmentInfoInteraction(YellMessage message) {
         // Actually get replies and display
         ((AllRepliesFragment) pagerAdapter.getItem(1)).updateOriginalPost(message);
         pager.setCurrentItem(1, true);
     }
 
     @Override
+    public void onMapFragmentMarkerInteraction(YellMessage message) {
+        ((AllRepliesFragment) pagerAdapter.getItem(1)).updateOriginalPost(message);
+    }
+
+    @Override
     public void onReplyFragmentInteraction(Long id) {
         new GetReplies(this).execute(id);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (pager.getCurrentItem() != 0) {
+            pager.setCurrentItem(0, true);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {

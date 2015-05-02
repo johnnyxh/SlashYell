@@ -38,6 +38,7 @@ public class SettingsActivity extends PreferenceActivity {
     // Keep all of the key-value pairs for preferences here for use throughout app
     public static final String DISPLAY_NAME = "display_name";
 
+
     /**
      * Determines whether to always show the simplified settings UI, where
      * settings are presented in a single list. When false, settings are shown

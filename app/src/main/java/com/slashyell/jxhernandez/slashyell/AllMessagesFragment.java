@@ -3,15 +3,10 @@ package com.slashyell.jxhernandez.slashyell;
 import android.app.Activity;
 
 import android.app.Fragment;
-import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.androidmapsextensions.GoogleMap;
@@ -22,7 +17,6 @@ import com.example.johnny.myapplication.backend.yellMessageApi.model.YellMessage
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,7 +98,15 @@ public class AllMessagesFragment extends MapFragment {
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
-                mListener.onMapFragmentInteraction((YellMessage) marker.getData());
+                mListener.onMapFragmentInfoInteraction((YellMessage) marker.getData());
+            }
+        });
+
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                mListener.onMapFragmentMarkerInteraction((YellMessage) marker.getData());
+                return false;
             }
         });
 
@@ -149,7 +151,8 @@ public class AllMessagesFragment extends MapFragment {
      */
     public interface OnMessagesInteractionListener {
         // TODO: Update argument type and name
-        public void onMapFragmentInteraction(YellMessage message);
+        public void onMapFragmentInfoInteraction(YellMessage message);
+        public void onMapFragmentMarkerInteraction(YellMessage message);
     }
 
     public void locationFound(GeoPt center) {

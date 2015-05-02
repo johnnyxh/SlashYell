@@ -23,6 +23,7 @@
         android:textColorHint="@color/hint_text_color"
         android:gravity="top|left"
         android:scrollbars="vertical"
+        android:maxLength="200"
         />
 
 </LinearLayout>
