@@ -31,6 +31,7 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
     private static final int NUM_PAGES = 2;
 
     private MenuItem refreshButton;
+    private MenuItem locationButton;
     private View refreshView;
     private ImageButton newYellButton;
 
@@ -49,6 +50,10 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
         final ActionBar actionBar = getActionBar();
 
         pager = (ViewPager) findViewById(R.id.main_activity_pager);
+        pager.setPageTransformer(false, new DepthPageTransformer());
+        pager.setPageMargin(-50);
+        pager.setHorizontalFadingEdgeEnabled(true);
+        pager.setFadingEdgeLength(30);
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i2) {
@@ -66,6 +71,8 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
                             createNewYell();
                         }
                     });
+                    locationButton.setVisible(true);
+                    locationButton.setEnabled(true);
                 }
                 else if (i == 1) {
                     newYellButton.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +82,8 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
                             createNewReply();
                         }
                     });
+                    locationButton.setVisible(false);
+                    locationButton.setEnabled(false);
                 }
             }
 
@@ -131,6 +140,8 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
         refreshButton = menu.findItem(R.id.action_refresh);
         refreshView = refreshButton.getActionView();
 
+        locationButton = menu.findItem(R.id.action_location_found);
+
         return true;
     }
 
@@ -155,7 +166,14 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
         if (id == R.id.action_refresh) {
             refreshButton.setActionView(R.layout.actionbar_indeterminate_progress);
             refreshButton.setEnabled(false);
-            new GetYells(this).execute(MapUtils.getLocation(gps));
+            switch(pager.getCurrentItem()) {
+                case 0:
+                    new GetYells(this).execute(MapUtils.getLocation(gps));
+                    break;
+                case 1:
+                    new GetReplies(this).execute(((AllRepliesFragment) pagerAdapter.getItem(1)).getOriginalPost());
+                    break;
+            }
             return true;
         }
 
@@ -170,6 +188,13 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
     }
 
     @Override
+    public void onRepliesReceived(List<YellMessage> replies) {
+        ((AllRepliesFragment) pagerAdapter.getItem(1)).updateReplies(replies);
+        refreshButton.setActionView(refreshView);
+        refreshButton.setEnabled(true);
+    }
+
+    @Override
     public void onMapFragmentInteraction(YellMessage message) {
         // Actually get replies and display
         ((AllRepliesFragment) pagerAdapter.getItem(1)).updateOriginalPost(message);
@@ -177,8 +202,8 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
     }
 
     @Override
-    public void onReplyFragmentInteraction(Uri uri) {
-
+    public void onReplyFragmentInteraction(Long id) {
+        new GetReplies(this).execute(id);
     }
 
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
@@ -194,21 +219,8 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
 
         }
 
-        // Overlap effect
-        @Override
-        public float getPageWidth(int position) {
-            if (position == 0) {
-                return 0.95f;
-            }
-            return 1f;
-        }
-
         @Override
         public Fragment getItem(int position) {
-            Log.e("Pager", "position: " + position);
-
-
-
             return fragments[position];
         }
 

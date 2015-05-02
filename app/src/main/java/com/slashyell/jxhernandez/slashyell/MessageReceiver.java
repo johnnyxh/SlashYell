@@ -11,4 +11,5 @@ import java.util.List;
  */
 public interface MessageReceiver {
     public void onMessagesReceived(List<YellMessage> messages);
+    public void onRepliesReceived(List<YellMessage> replies);
 }
