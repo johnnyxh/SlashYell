@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <EditText
-        android:id = "@+id/reply_dialog_message"
+        android:id="@+id/reply_dialog_message"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="5"
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical"
+        android:gravity="top|left"
         android:maxLength="200"/>
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/reply_character_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:textSize="15sp"
+        android:textColor="@color/wallet_hint_foreground_holo_light"
+        android:layout_alignRight="@id/reply_dialog_message"
+        android:layout_alignEnd="@id/reply_dialog_message"
+        android:layout_alignBottom="@id/reply_dialog_message"
+        android:text="200"/>
+
+</RelativeLayout>

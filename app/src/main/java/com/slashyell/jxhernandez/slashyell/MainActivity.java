@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.johnny.myapplication.backend.yellMessageApi.model.GeoPt;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.YellMessage;
@@ -130,8 +131,6 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
 
 
         gps = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        GeoPt myLocation = MapUtils.getLocation(gps);
     }
 
     @Override
@@ -162,7 +161,11 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
         }
         if (id == R.id.action_location_found) {
             GeoPt center = MapUtils.getLocation(gps);
-            ((AllMessagesFragment) pagerAdapter.getItem(0)).locationFound(center);
+            if (center != null) {
+                ((AllMessagesFragment) pagerAdapter.getItem(0)).locationFound(center);
+            } else {
+                Toast.makeText(this, getResources().getString(R.string.location_unavailable), Toast.LENGTH_LONG);
+            }
             return true;
         }
         if (id == R.id.action_refresh) {
@@ -170,7 +173,12 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
             refreshButton.setEnabled(false);
             switch(pager.getCurrentItem()) {
                 case 0:
-                    new GetYells(this).execute(MapUtils.getLocation(gps));
+                    GeoPt center = MapUtils.getLocation(gps);
+                    if (center != null) {
+                        new GetYells(this).execute(center);
+                    } else {
+                        Toast.makeText(this, getResources().getString(R.string.location_unavailable), Toast.LENGTH_LONG);
+                    }
                     break;
                 case 1:
                     new GetReplies(this).execute(((AllRepliesFragment) pagerAdapter.getItem(1)).getOriginalPost());

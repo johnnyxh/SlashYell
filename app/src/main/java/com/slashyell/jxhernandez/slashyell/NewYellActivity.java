@@ -12,6 +12,8 @@ import android.location.LocationManager;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +21,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidmapsextensions.GoogleMap;
 import com.androidmapsextensions.MapFragment;
@@ -78,7 +82,25 @@ public class NewYellActivity extends Activity {
             }
         });
 
+        // Setting up the character counter
+        // TODO: Consider making this a custom view so I can use it elsewhere
         yellText = (EditText) findViewById(R.id.yelltext);
+        final TextView charCounter = (TextView) findViewById(R.id.yell_message_counter);
+
+        final TextWatcher mTextEditorWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //This sets a textview to the current length
+                charCounter.setText(String.valueOf(200 - s.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        };
+        yellText.addTextChangedListener(mTextEditorWatcher);
 
 
 
@@ -114,6 +136,8 @@ public class NewYellActivity extends Activity {
             });
 
 
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.location_unavailable), Toast.LENGTH_LONG);
         }
 
     }

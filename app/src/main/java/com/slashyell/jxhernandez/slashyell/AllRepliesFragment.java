@@ -10,11 +10,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -190,18 +193,34 @@ public class AllRepliesFragment extends Fragment {
     }
     public void createReply() {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        //final EditText editText = (EditText)view.findViewById(R.id.editText1);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Input a message");
         final View v = inflater.inflate(R.layout.new_reply_dialog, null);
+        final EditText inputText = (EditText) v.findViewById(R.id.reply_dialog_message);
+        final TextView charCounter = (TextView) v.findViewById(R.id.reply_character_count);
+
+        final TextWatcher mTextEditorWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //This sets a textview to the current length
+                charCounter.setText(String.valueOf(200 - s.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        };
+        inputText.addTextChangedListener(mTextEditorWatcher);
+
         builder.setView(v);
         builder.setPositiveButton("POST",
                 new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if(originalPost == null)return;
-                            EditText messageEditText = (EditText) v.findViewById(R.id.reply_dialog_message);
-                            String message = messageEditText.getText().toString();
+                            String message = inputText.getText().toString();
                             if (message.isEmpty()) {
                                 return;
                             }
@@ -236,7 +255,6 @@ public class AllRepliesFragment extends Fragment {
                         }
 
                 });
-
         builder.show();
     }
 

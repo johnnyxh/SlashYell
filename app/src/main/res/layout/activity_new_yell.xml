@@ -13,11 +13,16 @@
         android:layout_weight="2"
         class="com.androidmapsextensions.MapFragment" />
 
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3">
+
     <EditText
         android:id="@+id/yelltext"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_height="match_parent"
         android:inputType="textMultiLine"
         android:hint="@string/new_yell_hint"
         android:textColorHint="@color/hint_text_color"
@@ -25,5 +30,21 @@
         android:scrollbars="vertical"
         android:maxLength="200"
         />
+
+        <TextView
+            android:id="@+id/yell_message_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:textSize="15sp"
+            android:textColor="@color/wallet_hint_foreground_holo_light"
+            android:layout_alignRight="@id/yelltext"
+            android:layout_alignEnd="@id/yelltext"
+            android:layout_alignBottom="@id/yelltext"
+            android:text="200"/>
+
+
+    </RelativeLayout>
 
 </LinearLayout>
