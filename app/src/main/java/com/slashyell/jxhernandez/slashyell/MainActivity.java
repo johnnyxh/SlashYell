@@ -47,6 +47,8 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        gps = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         // Setting custom action bars
         final ActionBar actionBar = getActionBar();
 
@@ -129,8 +131,6 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
         actionBar.addTab(actionBar.newTab().setText("REPLIES")
                 .setTabListener(tabListener));
 
-
-        gps = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
     }
 
     @Override
@@ -237,7 +237,8 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
             fragments = new Fragment[2];
-            fragments[0] = new AllMessagesFragment();
+            GeoPt center = MapUtils.getLocation(gps);
+            fragments[0] = AllMessagesFragment.newInstance(center.getLatitude(), center.getLongitude());
             fragments[1] = new AllRepliesFragment();
 
 

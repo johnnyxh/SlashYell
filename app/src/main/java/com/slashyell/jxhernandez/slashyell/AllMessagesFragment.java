@@ -15,6 +15,7 @@ import com.androidmapsextensions.Marker;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.GeoPt;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.YellMessage;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.HashMap;
@@ -33,15 +34,11 @@ import java.util.Map;
 public class AllMessagesFragment extends MapFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_INIT_LOCATION_LONG = "arg_init_location_long";
+    private static final String ARG_INIT_LOCATION_LAT = "arg_init_location_lat";
 
     private static final float ZOOM_LEVEL_NORMAL = 16f;
     private static final float ZOOM_LEVEL_MESSAGE = 18f;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     YellMessageWindowAdapter markerAdapter;
 
@@ -55,16 +52,16 @@ public class AllMessagesFragment extends MapFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param longitude The inital zoom in longitude
+     * @param latitude The intial zoom in latitude
      * @return A new instance of fragment AllMessagesFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AllMessagesFragment newInstance(String param1, String param2) {
+    public static AllMessagesFragment newInstance(float latitude, float longitude) {
         AllMessagesFragment fragment = new AllMessagesFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putFloat(ARG_INIT_LOCATION_LAT, latitude);
+        args.putFloat(ARG_INIT_LOCATION_LONG, longitude);
         fragment.setArguments(args);
         return fragment;
     }
@@ -76,11 +73,6 @@ public class AllMessagesFragment extends MapFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
     }
 
     @Override
@@ -110,13 +102,12 @@ public class AllMessagesFragment extends MapFragment {
             }
         });
 
-        /*
         // Initial animation/zoom into users position
-        if (myLocation != null)
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLatitude(), gps.getLastKnownLocation(gps.getBestProvider(new Criteria(), true)).getLongitude()), ZOOM_LEVEL_NORMAL));
+        if (getArguments() != null)
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(getArguments().getFloat(ARG_INIT_LOCATION_LAT), getArguments().getFloat(ARG_INIT_LOCATION_LONG)), ZOOM_LEVEL_NORMAL));
 
         //new EndPointAsyncTask().execute();
-        */
+
 
         return rootView;
 
