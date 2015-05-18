@@ -173,15 +173,10 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
             refreshButton.setEnabled(false);
             switch(pager.getCurrentItem()) {
                 case 0:
-                    GeoPt center = MapUtils.getLocation(gps);
-                    if (center != null) {
-                        new GetYells(this).execute(center);
-                    } else {
-                        Toast.makeText(this, getResources().getString(R.string.location_unavailable), Toast.LENGTH_LONG);
-                    }
+                    refreshMessages();
                     break;
                 case 1:
-                    new GetReplies(this).execute(((AllRepliesFragment) pagerAdapter.getItem(1)).getOriginalPost());
+                    refreshReplies();
                     break;
             }
             return true;
@@ -214,6 +209,11 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
     @Override
     public void onMapFragmentMarkerInteraction(YellMessage message) {
         ((AllRepliesFragment) pagerAdapter.getItem(1)).updateOriginalPost(message);
+    }
+
+    @Override
+    public void onMapInit() {
+        refreshMessages();
     }
 
     @Override
@@ -267,5 +267,18 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
     private Drawable getDrawable(String d) {
         int imageResource = getResources().getIdentifier(d, null, getPackageName());
         return getResources().getDrawable(imageResource);
+    }
+
+    private void refreshMessages() {
+        GeoPt center = MapUtils.getLocation(gps);
+        if (center != null) {
+            new GetYells(this).execute(center);
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.location_unavailable), Toast.LENGTH_LONG);
+        }
+    }
+
+    private void refreshReplies() {
+        new GetReplies(this).execute(((AllRepliesFragment) pagerAdapter.getItem(1)).getOriginalPost());
     }
 }

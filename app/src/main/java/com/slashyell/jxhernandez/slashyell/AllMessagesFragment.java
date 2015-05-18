@@ -102,6 +102,9 @@ public class AllMessagesFragment extends MapFragment {
             }
         });
 
+        // Initial content refresh
+        mListener.onMapInit();
+
         // Initial animation/zoom into users position
         if (getArguments() != null)
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(getArguments().getFloat(ARG_INIT_LOCATION_LAT), getArguments().getFloat(ARG_INIT_LOCATION_LONG)), ZOOM_LEVEL_NORMAL));
@@ -144,6 +147,7 @@ public class AllMessagesFragment extends MapFragment {
         // TODO: Update argument type and name
         public void onMapFragmentInfoInteraction(YellMessage message);
         public void onMapFragmentMarkerInteraction(YellMessage message);
+        public void onMapInit();
     }
 
     public void locationFound(GeoPt center) {
