@@ -3,10 +3,14 @@ package com.slashyell.jxhernandez.slashyell;
 import android.app.Activity;
 
 import android.app.Fragment;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.androidmapsextensions.GoogleMap;
@@ -32,7 +36,6 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class AllMessagesFragment extends MapFragment {
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_INIT_LOCATION_LONG = "arg_init_location_long";
     private static final String ARG_INIT_LOCATION_LAT = "arg_init_location_lat";
@@ -45,6 +48,8 @@ public class AllMessagesFragment extends MapFragment {
     private Map<Long, Marker> idMarkerMap;
 
     private GoogleMap map;
+
+    private Bitmap drawableMap;
 
     private OnMessagesInteractionListener mListener;
 
@@ -102,15 +107,11 @@ public class AllMessagesFragment extends MapFragment {
             }
         });
 
-        // Initial content refresh
         mListener.onMapInit();
 
         // Initial animation/zoom into users position
         if (getArguments() != null)
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(getArguments().getFloat(ARG_INIT_LOCATION_LAT), getArguments().getFloat(ARG_INIT_LOCATION_LONG)), ZOOM_LEVEL_NORMAL));
-
-        //new EndPointAsyncTask().execute();
-
 
         return rootView;
 

@@ -1,26 +1,24 @@
 package com.slashyell.jxhernandez.slashyell;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.location.Address;
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -29,7 +27,6 @@ import android.widget.TextView;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.GeoPt;
 import com.example.johnny.myapplication.backend.yellMessageApi.model.YellMessage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +52,7 @@ public class AllRepliesFragment extends Fragment {
     private YellMessage originalPost;
 
     private RelativeLayout noMessageContainer;
+    private RelativeLayout opMessageContainer;
     private LinearLayout messageContainer;
 
     private TextView originalPostName;
@@ -106,9 +104,8 @@ public class AllRepliesFragment extends Fragment {
         yellRepliesList = (ListView) rootView.findViewById(R.id.yellList);
 
         noMessageContainer = (RelativeLayout) rootView.findViewById(R.id.reply_no_message);
+        opMessageContainer = (RelativeLayout) rootView.findViewById(R.id.op_message_layout);
         messageContainer = (LinearLayout) rootView.findViewById(R.id.reply_content_message);
-
-
 
         View emptyView = inflater.inflate(R.layout.empty_yell_list, null);
         ((ViewGroup)yellRepliesList.getParent()).addView(emptyView);
@@ -164,6 +161,7 @@ public class AllRepliesFragment extends Fragment {
         public void onReplyFragmentInteraction(Long id);
     }
 
+    @SuppressLint("NewApi")
     public void updateOriginalPost(YellMessage message) {
         this.originalPost = message;
         noMessageContainer.setVisibility(View.GONE);
@@ -172,6 +170,7 @@ public class AllRepliesFragment extends Fragment {
         originalPostTime.setText(DateUtils.getRelativeDateTimeString(getActivity(), message.getDate().getValue(), DateUtils.SECOND_IN_MILLIS, DateUtils.WEEK_IN_MILLIS, 0));
         originalPostMessage.setText(message.getMessage());
         originalPostLocation.setText(message.getTextLocation());
+
         mListener.onReplyFragmentInteraction(message.getId());
     }
 

@@ -1,26 +1,19 @@
 package com.slashyell.jxhernandez.slashyell;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Address;
-import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,10 +25,8 @@ import com.example.johnny.myapplication.backend.yellMessageApi.model.YellMessage
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.api.client.util.DateTime;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -67,7 +58,7 @@ public class NewYellActivity extends Activity {
 
 
         gps = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        final GeoPt myLocation = MapUtils.getLocation(gps);
+        final GeoPt myLocation = MapUtils.getCurrentLocation(gps);
 
 
         map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {

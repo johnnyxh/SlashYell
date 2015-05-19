@@ -9,16 +9,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.johnny.myapplication.backend.yellMessageApi.model.GeoPt;
@@ -160,9 +157,9 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
             return true;
         }
         if (id == R.id.action_location_found) {
-            GeoPt center = MapUtils.getLocation(gps);
+            GeoPt center = MapUtils.getCurrentLocation(gps);
             if (center != null) {
-                ((AllMessagesFragment) pagerAdapter.getItem(0)).locationFound(center);
+                pagerAdapter.getAllMessagesFragment().locationFound(center);
             } else {
                 Toast.makeText(this, getResources().getString(R.string.location_unavailable), Toast.LENGTH_LONG);
             }
@@ -187,14 +184,14 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
 
     @Override
     public void onMessagesReceived(List<YellMessage> messages) {
-        ((AllMessagesFragment) pagerAdapter.getItem(0)).refreshMessages(messages);
+        pagerAdapter.getAllMessagesFragment().refreshMessages(messages);
         refreshButton.setActionView(refreshView);
         refreshButton.setEnabled(true);
     }
 
     @Override
     public void onRepliesReceived(List<YellMessage> replies) {
-        ((AllRepliesFragment) pagerAdapter.getItem(1)).updateReplies(replies);
+        pagerAdapter.getAllRepliesFragment().updateReplies(replies);
         refreshButton.setActionView(refreshView);
         refreshButton.setEnabled(true);
     }
@@ -202,13 +199,13 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
     @Override
     public void onMapFragmentInfoInteraction(YellMessage message) {
         // Actually get replies and display
-        ((AllRepliesFragment) pagerAdapter.getItem(1)).updateOriginalPost(message);
+        // pagerAdapter.getAllRepliesFragment().updateOriginalPost(message);
         pager.setCurrentItem(1, true);
     }
 
     @Override
     public void onMapFragmentMarkerInteraction(YellMessage message) {
-        ((AllRepliesFragment) pagerAdapter.getItem(1)).updateOriginalPost(message);
+        pagerAdapter.getAllRepliesFragment().updateOriginalPost(message);
     }
 
     @Override
@@ -237,7 +234,7 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
             fragments = new Fragment[2];
-            GeoPt center = MapUtils.getLocation(gps);
+            GeoPt center = MapUtils.getCurrentLocation(gps);
             fragments[0] = AllMessagesFragment.newInstance(center.getLatitude(), center.getLongitude());
             fragments[1] = new AllRepliesFragment();
 
@@ -252,6 +249,14 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
         @Override
         public int getCount() {
             return NUM_PAGES;
+        }
+
+        public AllMessagesFragment getAllMessagesFragment() {
+            return (AllMessagesFragment) fragments[0];
+        }
+
+        public AllRepliesFragment getAllRepliesFragment() {
+            return (AllRepliesFragment) fragments[1];
         }
     }
 
@@ -270,7 +275,7 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
     }
 
     private void refreshMessages() {
-        GeoPt center = MapUtils.getLocation(gps);
+        GeoPt center = MapUtils.getMapLocation(pagerAdapter.getAllMessagesFragment().getExtendedMap());
         if (center != null) {
             new GetYells(this).execute(center);
         } else {
@@ -279,6 +284,6 @@ public class MainActivity extends Activity implements MessageReceiver, AllMessag
     }
 
     private void refreshReplies() {
-        new GetReplies(this).execute(((AllRepliesFragment) pagerAdapter.getItem(1)).getOriginalPost());
+        new GetReplies(this).execute(pagerAdapter.getAllRepliesFragment().getOriginalPost());
     }
 }
